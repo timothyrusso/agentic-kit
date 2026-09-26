@@ -1,0 +1,6 @@
+{
+  "projectName": "acme",
+  "featuresRoot": "src/features",
+  "appRoot": "app",
+  "i18n": { "catalogPath": "src/i18n", "languages": ["en", "it"] }
+}

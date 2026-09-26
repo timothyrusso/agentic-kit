@@ -1,7 +1,7 @@
 {
   "name": "@timothyrusso/config-presets",
   "version": "0.0.0",
-  "description": "Biome, commitlint, lefthook, tsconfig, jest and CI presets, plus the kit.config.json loader.",
+  "description": "Biome, commitlint, lefthook, tsconfig, Jest and CI presets, the kit.config.json loader, the check scripts and the init command.",
   "license": "MIT",
   "type": "module",
   "repository": {
@@ -14,12 +14,29 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./kit.config.schema.json": "./dist/kitConfig.schema.json"
+    "./kit.config.schema.json": "./dist/kitConfig.schema.json",
+    "./biome": "./biome/base.json",
+    "./commitlint": "./commitlint.config.cjs",
+    "./tsconfig/expo.json": "./tsconfig/expo.json",
+    "./jest": "./jest/preset.js",
+    "./lefthook.yml": "./lefthook.yml",
+    "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "config-presets": "./dist/cli.js"
+  },
   "files": [
-    "dist"
+    "dist",
+    "biome",
+    "jest",
+    "tsconfig",
+    "github",
+    "templates",
+    ".claude",
+    "commitlint.config.cjs",
+    "lefthook.yml"
   ],
   "engines": {
     "node": ">=22"
@@ -30,9 +47,27 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "test": "jest --passWithNoTests"
+    "test": "NODE_OPTIONS=\"--experimental-vm-modules --no-warnings=ExperimentalWarning\" jest"
   },
   "dependencies": {
-    "ajv": "^8.20.0"
+    "ajv": "^8.20.0",
+    "jiti": "^2.7.0"
+  },
+  "peerDependencies": {
+    "@timothyrusso/arch-rules": "0.0.0",
+    "@timothyrusso/eslint-plugin-arch": "0.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@timothyrusso/arch-rules": {
+      "optional": true
+    },
+    "@timothyrusso/eslint-plugin-arch": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^21.2.3",
+    "@commitlint/lint": "^21.2.3",
+    "@commitlint/load": "^21.2.3"
   }
 }

@@ -15,11 +15,18 @@ export default {
     },
     {
       name: 'no-orphans',
-      comment: 'A module nothing imports is dead code, unless it is an entry point, a test or a config file',
+      comment:
+        'A module nothing imports is dead code, unless it is an entry point, a test, a config file or a preset an app loads',
       severity: 'error',
       from: {
         orphan: true,
-        pathNot: ['(^|/)src/index\\.ts$', '(^|/)__tests__/', '(^|/)[^/]+\\.config\\.[cm]?js$', '\\.d\\.ts$'],
+        pathNot: [
+          '(^|/)src/(index|cli)\\.ts$',
+          '(^|/)__tests__/',
+          '(^|/)[^/]+\\.config\\.[cm]?js$',
+          '\\.d\\.ts$',
+          '^packages/config-presets/jest/',
+        ],
       },
       to: {},
     },
@@ -63,7 +70,11 @@ export default {
   options: {
     doNotFollow: { path: ['node_modules'] },
     exclude: {
-      path: ['^packages/[^/]+/(dist|coverage)/', '^packages/[^/]+/src/__tests__/fixtures/app/'],
+      path: [
+        '^packages/[^/]+/(dist|coverage)/',
+        '^packages/[^/]+/src/__tests__/fixtures/app/',
+        '^packages/config-presets/templates/',
+      ],
     },
     tsPreCompilationDeps: true,
     combinedDependencies: false,
