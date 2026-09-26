@@ -79,7 +79,7 @@ export class ItemNotFound extends AppErrorBase('ItemNotFound', 'errors.itemNotFo
 The kit ships four errors an app includes in its union: `UnexpectedError` (every defect),
 `SqlError` (a statement or transaction failed), `ConfigError` (the app config failed to decode
 at boot, naming the field) and whatever the app declares in its core concerns (`HttpError`,
-`OfflineError`, `ParseError`).
+`OfflineError`, `DecodeError`).
 
 ## The closed `AppError` union
 
@@ -89,7 +89,7 @@ at boot, naming the field) and whatever the app declares in its core concerns (`
 augmentation, which is a downward import.
 
 ```ts
-// features/core/error/domain/appError.ts
+// features/core/error/appError.ts
 import type { ConfigError, SqlError, UnexpectedError } from '@timothyrusso/effect-core';
 
 /** Each feature adds `<feature>: <its error union>` here from its domain/errors. */
@@ -103,15 +103,20 @@ export type AppError = AppErrorRegistry[keyof AppErrorRegistry];
 
 ```ts
 // features/items/domain/errors/index.ts
+import type { ItemCorrupt } from '@/features/items/domain/errors/ItemCorrupt';
 import type { ItemNameTaken } from '@/features/items/domain/errors/ItemNameTaken';
 import type { ItemNotFound } from '@/features/items/domain/errors/ItemNotFound';
 
 declare module '@/features/core/error' {
   interface AppErrorRegistry {
-    items: ItemNotFound | ItemNameTaken;
+    items: ItemNotFound | ItemNameTaken | ItemCorrupt;
   }
 }
 ```
+
+`appError.ts` sits at the root of `core/error`, not in its `domain/`: it imports types from
+`@timothyrusso/effect-core`, and `domain-pure-except-effect` allows no `node_modules` package in
+`domain/` except `effect`.
 
 The union is still closed: it is exactly the set of augmentations in the program, fixed at
 compile time. The message mapper, next to it in `core/error`, must name every tag:
@@ -126,6 +131,7 @@ export const errorTagToMessageKey = appErrors.assertExhaustiveMessageKeys({
   ConfigError: 'errors.config',
   ItemNotFound: 'errors.itemNotFound',
   ItemNameTaken: 'errors.itemNameTaken',
+  ItemCorrupt: 'errors.itemCorrupt',
 });
 ```
 
@@ -156,9 +162,13 @@ of `Effect.tryPromise` and `Effect.try` when there is no more specific error to 
 anything else becomes `new UnexpectedError({ cause })`.
 
 ```ts
-Effect.tryPromise({ try: () => api.item(id), catch: toAppError });
+Effect.tryPromise({ try: () => api.item(id), catch: cause => toAppError(cause) });
 Effect.tryPromise({ try: () => sdk.save(item), catch: cause => toAppError(cause, isItemsError) });
 ```
+
+Always call it with an arrow, never pass it as `catch: toAppError`: passed by reference,
+TypeScript resolves its generic overload and the error type widens to `AnyAppError`, which is not
+in `AppError`, so the facade stops compiling.
 
 Never cast: `error as Error` is forbidden by `no-restricted-syntax`. Narrow with `instanceof`
 or wrap with `toAppError`.
@@ -197,10 +207,17 @@ export const ItemRepositoryLive = Layer.effect(
 );
 ```
 
+`decodeItem` (in `data/adapters/`, see [ARCHITECTURE.md](ARCHITECTURE.md#data)) maps Schema's
+`ParseError` to the feature's `ItemCorrupt` and nothing else, so `byId` is
+`Effect<Item | undefined, SqlError | ItemCorrupt>`, exactly what the Tag declares. A
+`mapError(toAppError)` over the whole pipeline would turn the `SqlError` into an
+`UnexpectedError` too, and would not match the Tag.
+
 - Never let a promise rejection escape unmapped: every call is `trySql`, `withSqlite` or
   `Effect.tryPromise` with a `catch`.
-- A parse failure of untrusted data is a typed error (`ParseError` in the app's core, or a
-  feature error), not a defect: the data is wrong, not the code.
+- A parse failure of untrusted data is a typed error (a feature error such as `ItemCorrupt`, or a
+  core `DecodeError`), not a defect: the data is wrong, not the code. Do not name an app error
+  `ParseError`: Schema's own error already has that tag.
 - Never swallow: a `catchAll` that returns a default hides a failure the user should see. If a
   fallback is right, it is a use case decision, named and tested.
 

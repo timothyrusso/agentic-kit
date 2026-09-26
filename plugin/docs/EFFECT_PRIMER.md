@@ -105,7 +105,7 @@ A Tag is a named slot for a service: it says what the service can do, not how.
 ```ts
 export class ItemRepository extends Context.Tag('items/ItemRepository')<
   ItemRepository,
-  { readonly byId: (id: ItemId) => Effect.Effect<Item | undefined, SqlError> }
+  { readonly byId: (id: ItemId) => Effect.Effect<Item | undefined, SqlError | ItemCorrupt> }
 >() {}
 ```
 
@@ -117,10 +117,19 @@ export const ItemRepositoryLive = Layer.effect(
   ItemRepository,
   Effect.gen(function* () {
     const db = yield* SqliteClient;
-    return { byId: id => trySql('item by id', () => db.getFirstAsync(SQL, [id])) };
+    return {
+      byId: id =>
+        trySql('item by id', () => db.getFirstAsync<ItemRow>(SQL, [id])).pipe(
+          Effect.flatMap(row => (row === null ? Effect.succeed(undefined) : decodeItem(row))),
+        ),
+    };
   }),
 );
 ```
+
+The query alone gives a raw row. The Layer turns it into what the Tag promised: no row becomes
+`undefined`, and a row is decoded with a Schema, whose failure `decodeItem` maps to the feature's
+`ItemCorrupt` error.
 
 `Layer.mergeAll` combines Layers side by side. `Layer.provide` feeds one Layer's needs from
 another. The app ends up with one big Layer that fills every slot.
@@ -216,15 +225,43 @@ Where you see it: `useCases/` and `data/`, with `Clock` re-exported from
 
 ## Testing with Layers
 
-A test runs a use case with test Layers in place of the Live ones. There is no module mocking.
+A test runs code with test Layers in place of the Live ones. There is no module mocking.
+
+A use case test provides a fake built straight from the Tag:
 
 ```ts
+// features/items/useCases/__tests__/renameItem.test.ts
+const ItemRepositoryFake = (items: Item[]) =>
+  Layer.sync(ItemRepository, () => {
+    const byId = new Map(items.map(item => [item.id, item]));
+    return {
+      list: Effect.sync(() => [...byId.values()]),
+      byId: id => Effect.sync(() => byId.get(id)),
+      save: item => Effect.sync(() => void byId.set(item.id, item)),
+    };
+  });
+
 itEffect(
   'renames an item',
   Effect.gen(function* () {
     yield* renameItem(itemId, 'New name');
     const repo = yield* ItemRepository;
     expect((yield* repo.byId(itemId))?.name).toBe('New name');
+  }),
+  ItemRepositoryFake([{ id: itemId, name: 'Old name' }]),
+);
+```
+
+The Live Layer gets its own test in `data/`, against a real database:
+
+```ts
+// features/items/data/repositories/__tests__/itemRepositoryLive.test.ts
+itEffect(
+  'reads back what it saved',
+  Effect.gen(function* () {
+    const repo = yield* ItemRepository;
+    yield* repo.save(item);
+    expect(yield* repo.byId(item.id)).toEqual(item);
   }),
   Layer.provide(ItemRepositoryLive, makeNodeSqliteLayer()),
 );
@@ -235,11 +272,13 @@ services. The clock stands still until the test moves it with `advanceClock`. Th
 a real in-memory `node:sqlite` database, so repositories and migrations run real SQL. `collectLogs()`
 gives a `Logger` that records what was logged, for the rare test that checks logging.
 
-A use case test that does not care about storage provides a small fake with `Layer.succeed(ItemRepository, {...})`.
+Tests live inside the layer they test, so the same rules apply to them. A use case test never
+imports a Live Layer (`usecases-no-data-import`), and a test folder outside the inner layers could
+not import `effect` at all (`effect-only-in-inner-layers`).
 
 Where you see it: `itEffect`, `runTest`, `makeNodeSqliteLayer`, `collectLogs` and
-`advanceClock` from `@timothyrusso/effect-core/testing`, used in `__tests__/` next to each use
-case and Layer, and the shared test Layers in `features/core/testing`.
+`advanceClock` from `@timothyrusso/effect-core/testing`, used in `useCases/__tests__/` and
+`data/repositories/__tests__/`, and the shared core test Layers in `features/core/testing`.
 
 ## Ten mistakes agents make
 
@@ -281,14 +320,14 @@ rules from `createArchRules` in `@timothyrusso/arch-rules` and `configs.recommen
 | --- | --- |
 | Succeed with a value | `Effect.succeed(value)` |
 | Fail with a typed error | `yield* new ItemNotFound({ itemId })` or `Effect.fail(error)` |
-| Wrap a promise | `Effect.tryPromise({ try: () => call(), catch: toAppError })` |
+| Wrap a promise | `Effect.tryPromise({ try: () => call(), catch: cause => toAppError(cause) })` |
 | Wrap a SQL call | `withSqlite('op', db => db.getAllAsync(sql))` or `trySql('op', () => ...)` |
-| Wrap sync code that may throw | `Effect.try({ try: () => parse(text), catch: toAppError })` |
+| Wrap sync code that may throw | `Effect.try({ try: () => parse(text), catch: cause => toAppError(cause) })` |
 | Run steps in order | `Effect.gen(function* () { const a = yield* stepA; ... })` |
 | Transform a success | `effect.pipe(Effect.map(a => ...))` |
 | Chain another Effect | `effect.pipe(Effect.flatMap(a => next(a)))` |
 | Handle one error kind | `effect.pipe(Effect.catchTag('ItemNotFound', () => fallback))` |
-| Map every error | `effect.pipe(Effect.mapError(toAppError))` |
+| Map one error to a specific tagged error | `decode(row).pipe(Effect.mapError(cause => new ItemCorrupt({ cause })))` |
 | Declare a service | `class X extends Context.Tag('feature/X')<X, Shape>() {}` |
 | Use a service | `const x = yield* X` |
 | Implement a service | `Layer.succeed(X, impl)` or `Layer.effect(X, Effect.gen(...))` |

@@ -253,12 +253,13 @@ bridge, an AI client).
 import { Context, type Effect } from 'effect';
 import type { SqlError } from '@/features/core/error';
 import type { Item, ItemId } from '@/features/items/domain/entities/Item';
+import type { ItemCorrupt } from '@/features/items/domain/errors/ItemCorrupt';
 
 export class ItemRepository extends Context.Tag('items/ItemRepository')<
   ItemRepository,
   {
-    readonly list: Effect.Effect<readonly Item[], SqlError>;
-    readonly byId: (id: ItemId) => Effect.Effect<Item | undefined, SqlError>;
+    readonly list: Effect.Effect<readonly Item[], SqlError | ItemCorrupt>;
+    readonly byId: (id: ItemId) => Effect.Effect<Item | undefined, SqlError | ItemCorrupt>;
     readonly save: (item: Item) => Effect.Effect<void, SqlError>;
   }
 >() {}
@@ -279,7 +280,16 @@ imports it.
 
 - `data/dtos/`: the wire shapes, as Schemas, so decoding a response and typing it are one step.
 - `data/adapters/`: DTO to entity. A Schema transform when the mapping is one to one, a plain
-  function otherwise.
+  function otherwise. A decoder maps Schema's `ParseError` to the feature's own tagged error, and
+  only that error: a `mapError` over the whole pipeline would also swallow the `SqlError`.
+
+```ts
+// features/items/data/adapters/decodeItem.ts
+export const decodeItem = (row: unknown) =>
+  Schema.decodeUnknown(ItemFromRow)(row).pipe(Effect.mapError(cause => new ItemCorrupt({ cause })));
+export const decodeItems = (rows: unknown) =>
+  Schema.decodeUnknown(Schema.Array(ItemFromRow))(rows).pipe(Effect.mapError(cause => new ItemCorrupt({ cause })));
+```
 - `data/repositories/` and `data/services/`: the Live Layers. `ItemRepositoryLive` builds the
   service from the Tags it depends on (`SqliteClient`, `Config`) with `Layer.effect`.
 
@@ -291,10 +301,12 @@ export const ItemRepositoryLive = Layer.effect(
     const db = yield* SqliteClient;
     return {
       list: trySql('list items', () => db.getAllAsync<ItemRow>('SELECT * FROM items')).pipe(
-        Effect.flatMap(Schema.decodeUnknown(Schema.Array(ItemFromRow))),
-        Effect.mapError(toAppError),
+        Effect.flatMap(decodeItems),
       ),
-      byId: id => ...,
+      byId: id =>
+        trySql('item by id', () => db.getFirstAsync<ItemRow>('SELECT * FROM items WHERE id = ?', [id])).pipe(
+          Effect.flatMap(row => (row === null ? Effect.succeed(undefined) : decodeItem(row))),
+        ),
       save: item => ...,
     };
   }),
@@ -313,7 +325,7 @@ typed by an interface in `domain/repositories/`.
 
 - Reactive reads stay plain hook values (`undefined` while loading). No Effect.
 - Mutations are wrapped as Effects at the mutation boundary, and only there: the hook repository
-  returns functions that return `Effect.tryPromise({ try, catch: toAppError })`, and the facade
+  returns functions that return `Effect.tryPromise({ try, catch: cause => toAppError(cause) })`, and the facade
   hands them to `useEffectMutation`. The facade still imports no `effect`.
 
 ```ts
@@ -323,7 +335,7 @@ export const useItemRepository = (): ItemHookRepository => {
   const create = useMutation(api.items.create);
   return {
     items,
-    create: input => Effect.tryPromise({ try: () => create(input), catch: toAppError }),
+    create: input => Effect.tryPromise({ try: () => create(input), catch: cause => toAppError(cause) }),
   };
 };
 ```
@@ -554,7 +566,7 @@ This replaces a DI container. There is no container, no decorators, no resolve s
 | Feature Layer | `di/layer.ts` | `Layer.mergeAll` of the feature's Live Layers, exported from `index.ts` |
 | Core Layers | `core/logger`, `core/config`, `core/sqlite`, ... | `ConsoleLogger`, `ConfigLive`, `SqliteLive` |
 | App Layer and runtime | `core/runtime` (Tier 5) | Every feature Layer provided with the core Layers, then `makeAppRuntime` |
-| Test Layers | next to the Live Layer, or `core/testing` | `ItemRepositoryTest`, `makeNodeSqliteLayer()`, `collectLogs()` |
+| Test Layers | the `__tests__/` folder that uses them, or `core/testing` for core ones | `ItemRepositoryFake`, `makeNodeSqliteLayer()`, `collectLogs()` |
 
 ```ts
 // features/core/runtime/runtime.ts
@@ -583,6 +595,12 @@ declare module '@timothyrusso/effect-core/react' {
   [ERROR_HANDLING.md](ERROR_HANDLING.md#boot-failures).
 - **Hook repositories** stay outside the runtime: they are React hooks. Their mutations become
   Effects inside the repository and run through `useEffectMutation` like any other.
+- **Tests** sit in a `__tests__/` folder inside the layer they test (`useCases/__tests__/`,
+  `data/repositories/__tests__/`), so they stay under the same rules: a use case test imports
+  `effect` (allowed in `useCases/`) and provides fakes built from the Tag, never the Live Layer
+  (`usecases-no-data-import`); the Live Layer is tested from `data/`, against
+  `makeNodeSqliteLayer()`. A test folder at the feature root would fail
+  `effect-only-in-inner-layers`.
 - **Migrations** run at boot through `runMigrations` from `@timothyrusso/effect-core`, from the
   SQLite Layer or the bootstrap step. See [ERROR_HANDLING.md](ERROR_HANDLING.md#sqlite-and-migrations)
   for the two SQLite pragma traps.
@@ -633,7 +651,7 @@ The header is the navigator's own. `app/_layout.tsx` also holds the root `ErrorB
 | Errors | `PascalCase` tag = class name | `ItemNotFound.ts`, tag `ItemNotFound` |
 | Tags | `Noun` + `Repository` or capability | `ItemRepository.ts`, `Haptics.ts` |
 | Live Layers | `camelCase` file, `XxxLive` export | `itemRepositoryLive.ts` exports `ItemRepositoryLive` |
-| Test Layers | `XxxTest` | `ItemRepositoryTest` |
+| Test Layers | `XxxFake` | `ItemRepositoryFake` |
 | Feature Layer | `<Feature>Live` in `di/layer.ts` | `ItemsLive` |
 | Use cases | verb phrase, `camelCase` | `listActiveItems.ts`, `renameItem.ts` |
 | DTOs | `XxxDto` Schema | `ItemDto` |

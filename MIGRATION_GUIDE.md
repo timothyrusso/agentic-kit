@@ -113,7 +113,8 @@ put the coordination in a higher feature. Write the table into the app's `docs/A
 
 Core is the foundation every feature child depends on:
 
-1. `core/error`: the `AppErrorRegistry` and `AppError`, the exhaustive `errorTagToMessageKey`,
+1. `core/error`: the `AppErrorRegistry` and `AppError` in `core/error/appError.ts` (the concern
+   root, not `domain/`, since it imports the kit's error types), the exhaustive `errorTagToMessageKey`,
    `useAppErrorMessage`, re-exports of `AppErrorBase`, `UnexpectedError`, `SqlError`,
    `ConfigError`.
 2. `core/config`: `makeConfig(schema)` over the Expo `extra` block.
