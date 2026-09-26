@@ -1,0 +1,19 @@
+{
+  "name": "agentic-kit",
+  "owner": {
+    "name": "Timothy Russo",
+    "url": "https://github.com/timothyrusso"
+  },
+  "metadata": {
+    "description": "Claude Code plugin for agent-driven Expo apps built on the agentic-kit architecture"
+  },
+  "plugins": [
+    {
+      "name": "agentic-kit",
+      "source": "./plugin",
+      "description": "Agents, skills and the implement-issue workflow for apps configured by kit.config.json",
+      "version": "0.0.0",
+      "category": "development"
+    }
+  ]
+}
