@@ -4,7 +4,13 @@
 import { recommended } from './configs/recommended.js';
 import { plugin } from './plugin.js';
 
-export { PLUGIN_NAMESPACE, RESTRICTED_SYNTAX, recommended, SOURCE_FILES } from './configs/recommended.js';
+export {
+  DEFAULT_RELATIVE_IMPORT_ALLOW,
+  PLUGIN_NAMESPACE,
+  RESTRICTED_SYNTAX,
+  recommended,
+  SOURCE_FILES,
+} from './configs/recommended.js';
 export type { LintKitConfig } from './kitConfig.js';
 export { rules } from './rules/index.js';
 

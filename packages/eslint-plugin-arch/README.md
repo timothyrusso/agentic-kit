@@ -35,19 +35,26 @@ turns rules on as follows:
 | `arch/stable-row-handlers` | always |
 | `arch/no-effect-in-views` | always |
 | `arch/no-effect-run-in-facades` | always |
-| `arch/no-relative-imports` | always, no allowlist |
+| `arch/no-relative-imports` | always, allowed only in root-level `*.config.{js,cjs,mjs,ts}` files (`DEFAULT_RELATIVE_IMPORT_ALLOW`) |
 | `no-restricted-syntax` (`enum`, `as Error`) | always |
 | `arch/no-dashes` | `lint.dashes` is not `allow` |
 | `arch/no-literal-gutter` | `lint.layoutTokens` is set; only in `appRoot` and `<featuresRoot>/core/design-system` |
 | `no-restricted-imports` (`ActivityIndicator`) | `lint.singleSpinner`; off inside the design system |
 
-Override any of them in a later config block, for example an allowlist for relative imports:
+Override any of them in a later config block, for example a wider allowlist for relative imports
+(an override replaces the default list, so spread it back in):
 
 ```js
-{ files: ['**/*.ts'], rules: { 'arch/no-relative-imports': ['error', { allow: ['scripts'] }] } }
+import arch, { DEFAULT_RELATIVE_IMPORT_ALLOW } from '@timothyrusso/eslint-plugin-arch';
+
+{
+  files: ['**/*.ts'],
+  rules: { 'arch/no-relative-imports': ['error', { allow: [...DEFAULT_RELATIVE_IMPORT_ALLOW, 'scripts'] }] },
+}
 ```
 
-The package also exports `rules` (for `RuleTester`), `RESTRICTED_SYNTAX`, `SOURCE_FILES` and the
+The package also exports `rules` (for `RuleTester`), `RESTRICTED_SYNTAX`, `SOURCE_FILES`,
+`DEFAULT_RELATIVE_IMPORT_ALLOW` and the
 `LintKitConfig` type.
 
 Checks that need more than one file (i18n parity, unused catalog keys, hooks, watch bounds) are
@@ -125,7 +132,9 @@ names. Facades hand Effects to `useEffectQuery` and `useEffectMutation`.
 
 `./` and `../` in imports, re-exports, `import()`, `require()` and `import('...')` types, unless
 the file is in one of the `allow` globs (relative to the ESLint working directory; `*` stays in
-one folder, `**` spans folders, a folder covers everything under it).
+one folder, `**` spans folders, `{a,b}` matches either, a folder covers everything under it). The
+recommended config allows root-level `*.config.{js,cjs,mjs,ts}` files, which import their
+neighbours (`./kit.config.json`) by nature.
 
 ## Develop
 

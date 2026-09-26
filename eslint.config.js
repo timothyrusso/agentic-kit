@@ -1,4 +1,4 @@
-import arch, { SOURCE_FILES } from '@timothyrusso/eslint-plugin-arch';
+import arch, { DEFAULT_RELATIVE_IMPORT_ALLOW, SOURCE_FILES } from '@timothyrusso/eslint-plugin-arch';
 import kitConfig from './kit.config.json' with { type: 'json' };
 
 /**
@@ -7,7 +7,7 @@ import kitConfig from './kit.config.json' with { type: 'json' };
  * builds the plugin first, because this file loads it from `dist/`.
  *
  * The packages are NodeNext ESM without a path alias, so relative imports are allowed inside them,
- * in their config files and in `scripts/`.
+ * in their config files and in `scripts/`, on top of the root config files the default allows.
  */
 export default [
   { ignores: ['**/node_modules/**', '**/dist/**', '**/coverage/**', '**/__tests__/fixtures/app/**'] },
@@ -17,7 +17,7 @@ export default [
     rules: {
       'arch/no-relative-imports': [
         'error',
-        { allow: ['packages/*/src', 'packages/*/*.config.js', 'scripts', '*.config.js'] },
+        { allow: [...DEFAULT_RELATIVE_IMPORT_ALLOW, 'packages/*/src', 'packages/*/*.config.js', 'scripts'] },
       ],
     },
   },

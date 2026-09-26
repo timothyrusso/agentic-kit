@@ -96,6 +96,19 @@ describe('configs.recommended options', () => {
     expect(rules['no-restricted-imports']).toBeUndefined();
   });
 
+  it('allows relative imports in root-level config files by default', async () => {
+    const eslint = new ESLint({
+      cwd: FIXTURE,
+      overrideConfigFile: true,
+      overrideConfig: configs.recommended(kitConfig),
+    });
+    const lint = async (filePath: string) =>
+      (await eslint.lintText("import kit from './kit.config.json';\nexport default kit;\n", { filePath }))[0]?.messages;
+    expect(ruleIds(await lint('eslint.config.js'))).toEqual([]);
+    expect(ruleIds(await lint('metro.config.cjs'))).toEqual([]);
+    expect(ruleIds(await lint('app/items/local.config.ts'))).toEqual(['arch/no-relative-imports']);
+  });
+
   it('drops no-dashes when dashes are allowed', () => {
     expect(rulesOf({ lint: { dashes: 'allow' } })['arch/no-dashes']).toBeUndefined();
   });

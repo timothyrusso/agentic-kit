@@ -8,7 +8,8 @@ export function relativePath(cwd: string, filename: string): string {
 
 /**
  * Turns a small glob into a regular expression that matches a relative path and everything under
- * it: `**` spans folders, `*` stays inside one segment. `packages/*` matches `packages/a/src/b.ts`.
+ * it: `**` spans folders, `*` stays inside one segment, `{a,b}` is either. `packages/*` matches
+ * `packages/a/src/b.ts`.
  */
 export function globToRegExp(glob: string): RegExp {
   const trimmed = glob.replace(/^\.\//, '').replace(/\/+$/, '');
@@ -20,6 +21,12 @@ export function globToRegExp(glob: string): RegExp {
       i += 1;
     } else if (ch === '*') {
       source += '[^/]*';
+    } else if (ch === '{') {
+      source += '(?:';
+    } else if (ch === '}') {
+      source += ')';
+    } else if (ch === ',') {
+      source += '|';
     } else {
       source += ch.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
     }

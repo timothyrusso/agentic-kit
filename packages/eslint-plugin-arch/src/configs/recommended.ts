@@ -12,6 +12,12 @@ const EXTENSIONS = '{js,jsx,mjs,cjs,ts,tsx,mts,cts}';
 /** Every file the recommended config lints. */
 export const SOURCE_FILES = `**/*.${EXTENSIONS}`;
 
+/**
+ * Where `no-relative-imports` allows relative imports by default: root-level config files, such as
+ * `eslint.config.js` importing `./kit.config.json` or `metro.config.js`.
+ */
+export const DEFAULT_RELATIVE_IMPORT_ALLOW = ['*.config.{js,cjs,mjs,ts}'] as const;
+
 /** `no-restricted-syntax` entries: no TypeScript `enum`, no `as Error`. */
 export const RESTRICTED_SYNTAX = [
   {
@@ -35,7 +41,7 @@ function designSystemRoot(featuresRoot: string): string {
  *
  * - Always: the ViewModel rules (`prefer-viewmodel` allows `lint.allowedHooksInViews`),
  *   `no-inline-comments`, `no-jsx-comment-text`, `stable-row-handlers`, `no-effect-in-views`,
- *   `no-effect-run-in-facades`, `no-relative-imports` and `no-restricted-syntax` for `enum` and
+ *   `no-effect-run-in-facades`, `no-relative-imports` (allowed in root-level config files) and `no-restricted-syntax` for `enum` and
  *   `as Error`.
  * - `lint.dashes` is not `allow`: `no-dashes`.
  * - `lint.layoutTokens`: `no-literal-gutter` in `appRoot` and `<featuresRoot>/core/design-system`.
@@ -56,7 +62,7 @@ export function recommended(kitConfig: LintKitConfig = {}): Linter.Config[] {
     [prefix('stable-row-handlers')]: 'error',
     [prefix('no-effect-in-views')]: 'error',
     [prefix('no-effect-run-in-facades')]: 'error',
-    [prefix('no-relative-imports')]: 'error',
+    [prefix('no-relative-imports')]: ['error', { allow: [...DEFAULT_RELATIVE_IMPORT_ALLOW] }],
     'no-restricted-syntax': ['error', ...RESTRICTED_SYNTAX],
   };
   if (lint.dashes !== 'allow') rules[prefix('no-dashes')] = 'error';

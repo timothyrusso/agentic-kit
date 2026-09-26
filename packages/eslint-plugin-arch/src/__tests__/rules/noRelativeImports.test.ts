@@ -21,6 +21,12 @@ ruleTester.run('no-relative-imports', rule, {
       code: "import { a } from './a.js';",
       options: [{ allow: ['scripts/**/*.js'] }],
     },
+    {
+      name: 'a root config file, through a brace glob',
+      filename: at('metro.config.cjs'),
+      code: "const kit = require('./kit.config.json');",
+      options: [{ allow: ['*.config.{js,cjs,mjs,ts}'] }],
+    },
     { name: 'a dot-prefixed package name', filename: at('a.ts'), code: "import x from '.prettierrc';" },
   ],
   invalid: [
@@ -42,6 +48,13 @@ ruleTester.run('no-relative-imports', rule, {
         "type F = import('./f').F;",
       ].join('\n'),
       errors: Array.from({ length: 6 }, () => ({ messageId: 'relative' as const })),
+    },
+    {
+      name: 'a config file below the root is not a root config file',
+      filename: at('features/a/b.config.ts'),
+      code: "import x from './x';",
+      options: [{ allow: ['*.config.{js,cjs,mjs,ts}'] }],
+      errors: [{ messageId: 'relative' }],
     },
     {
       name: 'outside the allowlist',
