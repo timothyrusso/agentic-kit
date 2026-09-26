@@ -1,0 +1,2 @@
+# Files the layout rule skips, relative to the app root.
+features/core/design-system/Chart.tsx  # axis labels placed by measured offsets
