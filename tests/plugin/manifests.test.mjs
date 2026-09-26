@@ -42,7 +42,10 @@ describe('plugin manifests', () => {
       const meta = frontmatter(`plugin/agents/${file}`);
       expect(meta.name).toBe(file.replace(/\.md$/, ''));
       expect(typeof meta.description).toBe('string');
-      for (const skill of meta.skills ?? []) expect(skills).toContain(skill);
+      for (const skill of meta.skills ?? []) {
+        expect(skill).toMatch(/^agentic-kit:/);
+        expect(skills).toContain(skill.slice('agentic-kit:'.length));
+      }
     }
   });
 

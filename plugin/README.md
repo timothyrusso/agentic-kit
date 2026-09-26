@@ -27,7 +27,10 @@ To try a local checkout: `claude --plugin-dir <path to agentic-kit>/plugin`.
 | Templates (`templates/ISSUE_TEMPLATE/`) | the Feature issue form, which `config-presets init` copies into the app's `.github/ISSUE_TEMPLATE/` |
 | Agent memory (`agent-memory/`) | the convention only; each app commits its own `.claude/agent-memory/` |
 
-Plugin agents are addressed as `agentic-kit:<name>` (the workflow does so). Skills are invoked as
+Plugin agents are addressed as `agentic-kit:<name>` (the workflow does so). An agent's `skills:` preload names
+the plugin's skills as `agentic-kit:<skill>` too: a probe plugin showed both the bare and the
+namespaced form resolve, and the namespaced one cannot pick up a same-named skill from another
+plugin or the app. Skills are invoked as
 `/write-issue` or `/agentic-kit:write-issue`.
 
 ## The flow
@@ -64,4 +67,5 @@ number and ids but no owner.
 `grilling`, `grill-me`, `handoff`, `teach` and `writing-great-skills` come from
 [mattpocock/skills](https://github.com/mattpocock/skills); `agent-device` and `dogfood` from
 [callstack/agent-device](https://github.com/callstack/agent-device). Both are MIT licensed. They are vendored with
-dashes replaced to satisfy the kit's text rule; `grill-me` is an alias of `grilling`.
+dashes replaced to satisfy the kit's text rule; `grill-me` is an alias of `grilling`. Their
+license notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

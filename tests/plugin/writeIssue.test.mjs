@@ -67,6 +67,12 @@ describe('write-issue plan', () => {
     ]);
   });
 
+  it('shows an unknown owner as a placeholder, never as null', () => {
+    const text = formatDryRun(planIssue(config, { title: 'Banner', body, owner: null }));
+    expect(text).toContain("gh project item-add 3 --owner '<owner unknown>'");
+    expect(text).not.toContain('null');
+  });
+
   it('prints the dry run with every id and no created issue', () => {
     const text = formatDryRun(planIssue(config, { title: 'Banner', body, owner: 'acme-org' }));
     expect(text).toContain('nothing was created');

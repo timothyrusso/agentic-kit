@@ -85,7 +85,7 @@ export function planIssue(config, draft) {
         'item-add',
         String(board.projectNumber),
         '--owner',
-        String(board.owner),
+        board.owner ?? '<owner unknown>',
         '--url',
         '<issue url>',
       ],

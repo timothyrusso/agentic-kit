@@ -4,8 +4,8 @@ description: Runtime QA specialist for the MOBILE targets (iOS or Android device
 model: sonnet
 color: blue
 skills:
-  - agent-device
-  - qa-baseline
+  - agentic-kit:agent-device
+  - agentic-kit:qa-baseline
 tools:
   - Read
   - Grep
