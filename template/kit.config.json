@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/@timothyrusso/config-presets/dist/kitConfig.schema.json",
+  "projectName": "expo-kit-template",
+  "featuresRoot": "features",
+  "appRoot": "app",
+  "qa": {
+    "targets": ["mobile"],
+    "simulator": "iPhone 17 Pro",
+    "metroPort": 8082
+  },
+  "lint": {
+    "dashes": "forbid",
+    "allowedHooksInViews": ["useStyles", "useTheme"],
+    "layoutTokens": {
+      "gutterToken": "screenGutter",
+      "spacingImport": "@/features/core/design-system/tokens",
+      "allowlistFile": "layout.allow"
+    },
+    "singleSpinner": true
+  },
+  "i18n": {
+    "catalogPath": "features/core/translations/catalog",
+    "languages": ["en", "it"]
+  }
+}

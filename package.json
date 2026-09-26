@@ -28,7 +28,9 @@
     "release": "node scripts/release.js",
     "prepare": "lefthook install && npm run build:lint-plugin",
     "build:lint-plugin": "npm run build -w @timothyrusso/eslint-plugin-arch",
-    "smoke:presets": "node scripts/smoke-presets.js"
+    "smoke:presets": "node scripts/smoke-presets.js",
+    "template:verify": "node scripts/verify-template.js",
+    "template:sync": "node scripts/sync-template.js"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.14",

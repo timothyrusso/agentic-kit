@@ -13,7 +13,11 @@ Shared architecture for agent-driven Expo apps. One repository, two outputs:
 | `@timothyrusso/config-presets` | Biome, commitlint, lefthook, tsconfig, Jest and CI presets, and the `kit.config.json` loader |
 | `@timothyrusso/effect-core` | `AppError`, Logger, Config, the app runtime, `SqliteClient`, React hooks and testing helpers |
 
-`template/` will hold an Expo app already wired to the kit.
+`template/` holds an Expo SDK 57 app already wired to the kit (expo-router, TanStack Query,
+zustand, Effect, expo-sqlite), with a sample feature showing every layer and a fixture that
+violates every kit rule. It is published as the GitHub template repository
+[`timothyrusso/expo-kit-template`](https://github.com/timothyrusso/expo-kit-template), which needs
+kit 0.1.0 or later.
 
 ## Using the kit in an app
 
@@ -59,6 +63,11 @@ Node 22 (`.nvmrc`). `npm install`, then:
 - `npm run build`: `tsc` for every package into `dist/`.
 - `npm run smoke:presets`: packs the packages, creates a fresh Expo app, runs `config-presets init
   --yes` and the app's own `pr-checks.yml` checks on it (also the `presets-smoke.yml` workflow).
+- `npm run template:verify`: packs the packages, installs `template/` against them in a temp folder
+  and runs its `npm run check`, `npm test`, `npm run arch`, `npm run arch:fixtures` and
+  `npx expo export --platform ios` (the `template` job of `ci.yml`, on every PR).
+- `npm run template:sync -- --issue <n>`: pushes `template/` to `timothyrusso/expo-kit-template`,
+  creating that template repository if it is missing (`--dry-run` to preview).
 - `npm run release -- <version> --issue <n>`: bumps every package and the plugin manifest, commits
   `chore(<n>): release <version>` and tags `v<version>`. Pushing the tag runs `release.yml`,
   which publishes every package (needs the `NPM_TOKEN` repository secret).

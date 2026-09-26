@@ -10,7 +10,8 @@
       "!**/coverage",
       "!**/package-lock.json",
       "!**/__tests__/fixtures/app",
-      "!plugin/workflows"
+      "!plugin/workflows",
+      "!template"
     ]
   },
   "formatter": {

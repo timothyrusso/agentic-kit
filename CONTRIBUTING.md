@@ -31,6 +31,17 @@ consuming app name or GitHub project id in `plugin/` or `packages/`), the schema
 - Tests are jest, in `src/**/__tests__/*.test.ts` per package and `tests/plugin/*.test.mjs` for
   the plugin.
 
+## The template app
+
+`template/` is an Expo app, not a workspace: the root Biome, ESLint and dependency-cruiser configs
+skip it, and it has its own, written by `config-presets init`. Its `@timothyrusso/*` dependencies
+are `^<kit version>`, which the release script bumps with the packages. `npm run template:verify`
+installs it against the packed packages and runs its gates; `npm run check:text` still covers its
+files. When a rule is added, add a violation of it to `template/__fixtures__/violations/` and its
+id to `EXPECTED` in `template/scripts/check-fixtures.mjs`. After a release, `npm run template:sync
+-- --issue <n>` pushes it to the `timothyrusso/expo-kit-template` template repository, with a
+lockfile once that kit version is on npm.
+
 ## Lockstep versions
 
 Every package, the plugin manifest (`plugin/.claude-plugin/plugin.json`) and the marketplace

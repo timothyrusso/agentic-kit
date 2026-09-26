@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Lockstep release: every package, the plugin manifest and the marketplace entry get the same
- * version, then one commit and one tag.
+ * version, and `template/package.json` depends on it (`^<version>`), then one commit and one tag.
  *
  *   npm run release -- <version> --issue <n>   (or ISSUE=<n> npm run release -- <version>)
  *   npm run release -- <version> --issue <n> --dry-run
@@ -18,6 +18,7 @@ const SEMVER = /^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/;
 const SCOPE = '@timothyrusso/';
 const PLUGIN_MANIFESTS = ['plugin/plugin.json', 'plugin/.claude-plugin/plugin.json'];
 const MARKETPLACE_MANIFESTS = ['marketplace.json', '.claude-plugin/marketplace.json'];
+const TEMPLATE_MANIFEST = 'template/package.json';
 
 function fail(message) {
   console.error(`release: ${message}`);
@@ -72,6 +73,21 @@ function manifests() {
       versions: json => (json.plugins ?? []).filter(p => 'version' in p).map(p => p.version),
       bump: (json, version) => {
         for (const plugin of json.plugins ?? []) if ('version' in plugin) plugin.version = version;
+      },
+    });
+  }
+  if (existsSync(TEMPLATE_MANIFEST)) {
+    const kitDeps = json =>
+      ['dependencies', 'devDependencies'].flatMap(field =>
+        Object.keys(json[field] ?? {})
+          .filter(name => name.startsWith(SCOPE))
+          .map(name => [field, name]),
+      );
+    list.push({
+      file: TEMPLATE_MANIFEST,
+      versions: json => kitDeps(json).map(([field, name]) => json[field][name].replace(/^\^/, '')),
+      bump: (json, version) => {
+        for (const [field, name] of kitDeps(json)) json[field][name] = `^${version}`;
       },
     });
   }
