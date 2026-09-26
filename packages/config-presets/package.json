@@ -1,0 +1,38 @@
+{
+  "name": "@timothyrusso/config-presets",
+  "version": "0.0.0",
+  "description": "Biome, commitlint, lefthook, tsconfig, jest and CI presets, plus the kit.config.json loader.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timothyrusso/agentic-kit.git",
+    "directory": "packages/config-presets"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./kit.config.schema.json": "./dist/kitConfig.schema.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "jest --passWithNoTests"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0"
+  }
+}

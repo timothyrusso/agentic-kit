@@ -1,0 +1,34 @@
+{
+  "name": "@timothyrusso/effect-core",
+  "version": "0.0.0",
+  "description": "Shared Effect layer: AppError, Logger, Config, runtime, SqliteClient, React hooks and testing helpers.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timothyrusso/agentic-kit.git",
+    "directory": "packages/effect-core"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "jest --passWithNoTests"
+  }
+}
