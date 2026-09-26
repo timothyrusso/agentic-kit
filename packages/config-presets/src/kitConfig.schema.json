@@ -69,7 +69,36 @@
           "type": "string",
           "minLength": 1
         },
-        "metroPort": { "type": "integer", "minimum": 1024, "maximum": 65535 }
+        "metroPort": { "type": "integer", "minimum": 1024, "maximum": 65535 },
+        "baseline": {
+          "description": "App-specific steps of the baseline QA checks that run for every feature.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "setup": {
+              "description": "What to do before the checks, e.g. how to sign in with the test account.",
+              "type": "string",
+              "minLength": 1
+            },
+            "launch": {
+              "description": "What a healthy cold launch reaches, e.g. the Home tab with the greeting.",
+              "type": "string",
+              "minLength": 1
+            },
+            "firstScreens": {
+              "description": "Screens that must render right after launch.",
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "navigation": {
+              "description": "Primary navigation steps to exercise, one per entry.",
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            }
+          }
+        }
       }
     },
     "lint": {

@@ -1,0 +1,13 @@
+{
+  "name": "agentic-kit",
+  "version": "0.0.0",
+  "description": "Agents, skills and the implement-issue workflow for agent-driven Expo apps. Every app-specific value comes from the app's kit.config.json.",
+  "author": {
+    "name": "Timothy Russo",
+    "url": "https://github.com/timothyrusso"
+  },
+  "homepage": "https://github.com/timothyrusso/agentic-kit",
+  "repository": "https://github.com/timothyrusso/agentic-kit",
+  "license": "MIT",
+  "keywords": ["expo", "react-native", "effect", "architecture", "agents", "workflow"]
+}

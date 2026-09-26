@@ -14,7 +14,17 @@ const full = {
     statusOptions: { todo: 'a', inProgress: 'b', done: 'c' },
     labels: ['bug'],
   },
-  qa: { targets: ['mobile', 'web'], simulator: 'iPhone 17 Pro', metroPort: 8082 },
+  qa: {
+    targets: ['mobile', 'web'],
+    simulator: 'iPhone 17 Pro',
+    metroPort: 8082,
+    baseline: {
+      setup: 'Sign in with the test account',
+      launch: 'The Home tab',
+      firstScreens: ['Home'],
+      navigation: ['Open every tab'],
+    },
+  },
   lint: {
     allowedHooksInViews: ['useTheme'],
     dashes: 'forbid',

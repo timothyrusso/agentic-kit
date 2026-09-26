@@ -50,7 +50,12 @@ problem at once, for example `missing required field "projectName"`.
 
 Node 22 (`.nvmrc`). `npm install`, then:
 
-- `npm run check`: Biome, ESLint, the text guard, schema sync, `tsc --noEmit` and Jest per package.
+- `npm run check`: Biome, ESLint, the text guard, schema and plugin sync, `tsc --noEmit`, Jest per
+  package and the plugin tests (`tests/plugin/`: the workflow run with stubbed agents, the
+  write-issue script, the manifests).
+- `npm run sync:plugin-docs`: copies the root docs into `plugin/docs/` and the Feature issue
+  template into `config-presets`; `check` fails when a copy drifts. See the
+  [plugin README](plugin/README.md).
 - `npm run build`: `tsc` for every package into `dist/`.
 - `npm run smoke:presets`: packs the packages, creates a fresh Expo app, runs `config-presets init
   --yes` and the app's own `pr-checks.yml` checks on it (also the `presets-smoke.yml` workflow).

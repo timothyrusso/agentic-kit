@@ -228,6 +228,8 @@ export async function init(options: InitOptions): Promise<number> {
       content: () => jestConfig(featuresRoot),
     },
     { to: '.github/workflows/pr-checks.yml', content: template('github/pr-checks.yml') },
+    { to: '.github/ISSUE_TEMPLATE/feature.yml', content: template('github/ISSUE_TEMPLATE/feature.yml') },
+    { to: '.github/ISSUE_TEMPLATE/config.yml', content: template('github/ISSUE_TEMPLATE/config.yml') },
     { to: '.nvmrc', content: () => '22\n' },
   ];
 

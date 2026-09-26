@@ -9,7 +9,8 @@
       "!**/dist",
       "!**/coverage",
       "!**/package-lock.json",
-      "!**/__tests__/fixtures/app"
+      "!**/__tests__/fixtures/app",
+      "!plugin/workflows"
     ]
   },
   "formatter": {
