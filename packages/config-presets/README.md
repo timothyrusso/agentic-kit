@@ -48,6 +48,7 @@ the `@/` alias without plain comments, and replaces em and en dashes in the root
 | `.dependency-cruiser.mjs` | `createDependencyCruiserConfig(loadKitConfig())` from `@timothyrusso/arch-rules` |
 | `jest.config.cjs` | `require('@timothyrusso/config-presets/jest')` |
 | `.github/workflows/pr-checks.yml` | copy of [`github/pr-checks.yml`](github/pr-checks.yml) |
+| `.github/ISSUE_TEMPLATE/feature.yml`, `config.yml` | the Feature issue template the agents parse, synced from the plugin's `templates/ISSUE_TEMPLATE/` |
 | `.nvmrc` | `22` |
 | `tsconfig.json` | `extends` the preset, plus the `@/*` path for Metro and Jest |
 | `.claude/settings.json` | the deny list, the `agent-device` allow and the kit's marketplace, merged |

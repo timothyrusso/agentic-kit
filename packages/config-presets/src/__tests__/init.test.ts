@@ -82,6 +82,8 @@ describe('init --yes --no-install on a fresh Expo app', () => {
       '.dependency-cruiser.mjs',
       'jest.config.cjs',
       '.github/workflows/pr-checks.yml',
+      '.github/ISSUE_TEMPLATE/feature.yml',
+      '.github/ISSUE_TEMPLATE/config.yml',
       '.nvmrc',
     ]) {
       expect(existsSync(join(root, file))).toBe(true);
@@ -90,6 +92,9 @@ describe('init --yes --no-install on a fresh Expo app', () => {
       readFileSync(join(PACKAGE_ROOT, 'lefthook.yml'), 'utf8'),
     );
     expect(readJson(root, 'biome.json').extends).toEqual(['@timothyrusso/config-presets/biome']);
+    expect(readFileSync(join(root, '.github/ISSUE_TEMPLATE/feature.yml'), 'utf8')).toContain(
+      'label: Acceptance criteria',
+    );
   });
 
   it('points tsconfig.json at the preset and adds the @/ alias', () => {
