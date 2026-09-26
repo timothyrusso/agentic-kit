@@ -7,7 +7,7 @@
  *   node scripts/check-text.js --message F  a commit message file (commit-msg)
  *
  * Two rules. No em dash or en dash anywhere. No consuming app name and no GitHub project id in
- * `plugin/` or `packages/`: those values come from `kit.config.json`.
+ * `plugin/`, `packages/` or `template/`: those values come from `kit.config.json`.
  *
  * NOTE: the forbidden characters and words are built from code points and fragments, so this
  * file does not fail its own check and a repo-wide text replace cannot rewrite them.
@@ -21,7 +21,7 @@ const DASHES = [
   [EM, 'em dash'],
   [EN, 'en dash'],
 ];
-const SCOPED_ROOTS = ['plugin/', 'packages/'];
+const SCOPED_ROOTS = ['plugin/', 'packages/', 'template/'];
 const FORBIDDEN_IN_SCOPED = [
   [new RegExp(['holi', 'dai'].join(''), 'i'), 'app name'],
   [new RegExp(['kine', 'tiq'].join(''), 'i'), 'app name'],

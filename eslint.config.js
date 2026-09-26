@@ -10,6 +10,9 @@ import kitConfig from './kit.config.json' with { type: 'json' };
  * in their config files, in `scripts/`, in the plugin's scripts and in `tests/`, on top of the root
  * config files the default allows.
  *
+ * `template/` is an Expo app with its own Biome, ESLint and dependency-cruiser configs, checked by
+ * `npm run template:verify`.
+ *
  * `plugin/workflows/` is a Workflow tool script: a function body with a top-level `return`, which
  * no module parser accepts. `tests/plugin/pipeline.test.mjs` compiles and runs it instead.
  */
@@ -21,6 +24,7 @@ export default [
       '**/coverage/**',
       '**/__tests__/fixtures/app/**',
       'plugin/workflows/**',
+      'template/**',
     ],
   },
   ...arch.configs.recommended(kitConfig),
