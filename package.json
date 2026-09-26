@@ -12,11 +12,12 @@
     "node": ">=22 <23"
   },
   "scripts": {
-    "check": "npm run lint && npm run check:text && npm run check:schema && npm run typecheck && npm run test",
+    "check": "npm run lint && npm run check:text && npm run check:schema && npm run check:deps && npm run typecheck && npm run test",
     "lint": "biome check . && eslint .",
     "format": "biome check --write .",
     "check:text": "node scripts/check-text.js",
     "check:schema": "node scripts/sync-schema.js --check",
+    "check:deps": "depcruise packages --config .dependency-cruiser.js",
     "sync:schema": "node scripts/sync-schema.js",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
@@ -32,6 +33,7 @@
     "@swc/jest": "^0.2.39",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.20.4",
+    "dependency-cruiser": "^18.4.0",
     "eslint": "^10.11.0",
     "jest": "^30.5.2",
     "lefthook": "^2.1.14",

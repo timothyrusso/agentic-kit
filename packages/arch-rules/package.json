@@ -29,6 +29,12 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "test": "jest --passWithNoTests"
+    "test": "NODE_OPTIONS=\"--experimental-vm-modules --no-warnings=ExperimentalWarning\" jest"
+  },
+  "devDependencies": {
+    "dependency-cruiser": "^18.4.0"
+  },
+  "peerDependencies": {
+    "dependency-cruiser": "^18.0.0"
   }
 }
