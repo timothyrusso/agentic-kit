@@ -63,8 +63,21 @@ Node 22 (`.nvmrc`). `npm install`, then:
   `chore(<n>): release <version>` and tags `v<version>`. Pushing the tag runs `release.yml`,
   which publishes every package (needs the `NPM_TOKEN` repository secret).
 
-Conventions are in [CLAUDE.md](CLAUDE.md). The architecture, error handling, agentic workflow and
-Effect primer docs live at the repository root.
+Conventions are in [CLAUDE.md](CLAUDE.md); releasing, lockstep versions and adding a rule are in
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Docs
+
+| Doc | What it holds |
+| --- | --- |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Feature modules, integer tiers, layers, Services, Layers and the runtime, the ViewModel contract, every rule id |
+| [ERROR_HANDLING.md](ERROR_HANDLING.md) | `Effect<A, E, R>`, tagged errors and the closed `AppError` union, logging at the runtime boundary, boot and migration failures |
+| [AGENTIC_WORKFLOW.md](AGENTIC_WORKFLOW.md) | `kit.config.json`, installing the plugin, the pipeline, bot triage and the overnight runbook |
+| [EFFECT_PRIMER.md](EFFECT_PRIMER.md) | A short study document on Effect as the kit uses it |
+| [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) | How an existing Expo app adopts the kit |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Working on the kit: gates, releases, adding a rule, docs sync |
+
+All but CONTRIBUTING.md ship inside the plugin as `plugin/docs/` (`npm run sync:plugin-docs`).
 
 ## License
 
