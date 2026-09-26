@@ -1,0 +1,37 @@
+name: Presets smoke
+
+# NOTE: creates a fresh Expo app, runs `config-presets init --yes` on it with the packed packages,
+# then runs the `check` job of the app's own pr-checks.yml (npm ci, the architecture check,
+# npm run check, expo export for iOS) and commits through its git hooks. See
+# scripts/smoke-presets.js.
+
+on:
+  pull_request:
+    paths:
+      - 'packages/**'
+      - 'scripts/smoke-presets.js'
+      - 'package-lock.json'
+      - '.github/workflows/presets-smoke.yml'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: presets-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: node scripts/smoke-presets.js --dir "$RUNNER_TEMP/presets-smoke"
