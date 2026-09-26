@@ -26,3 +26,18 @@ jobs:
         run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
       - run: npm run check
       - run: npm run build
+
+  # NOTE: installs template/ against the packed kit packages and runs its gates (npm run check,
+  # the architecture rules and their fixtures, expo export for iOS). See scripts/verify-template.js.
+  template:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run template:verify -- --dir "$RUNNER_TEMP/template-verify"
