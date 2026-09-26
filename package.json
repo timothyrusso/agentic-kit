@@ -24,7 +24,8 @@
     "build": "npm run build --workspaces --if-present",
     "release": "node scripts/release.js",
     "prepare": "lefthook install && npm run build:lint-plugin",
-    "build:lint-plugin": "npm run build -w @timothyrusso/eslint-plugin-arch"
+    "build:lint-plugin": "npm run build -w @timothyrusso/eslint-plugin-arch",
+    "smoke:presets": "node scripts/smoke-presets.js"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.14",
@@ -39,6 +40,7 @@
     "jest": "^30.5.2",
     "lefthook": "^2.1.14",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.70.1"
+    "typescript-eslint": "^8.70.1",
+    "yaml": "^2.9.1"
   }
 }
