@@ -3,7 +3,14 @@
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!**/node_modules", "!**/dist", "!**/coverage", "!**/package-lock.json"]
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/coverage",
+      "!**/package-lock.json",
+      "!**/__tests__/fixtures/app"
+    ]
   },
   "formatter": {
     "enabled": true,

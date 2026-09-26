@@ -62,7 +62,9 @@ export default {
   ],
   options: {
     doNotFollow: { path: ['node_modules'] },
-    exclude: { path: ['^packages/[^/]+/(dist|coverage)/'] },
+    exclude: {
+      path: ['^packages/[^/]+/(dist|coverage)/', '^packages/[^/]+/src/__tests__/fixtures/app/'],
+    },
     tsPreCompilationDeps: true,
     combinedDependencies: false,
     enhancedResolveOptions: {

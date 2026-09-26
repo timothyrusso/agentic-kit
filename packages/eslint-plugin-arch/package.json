@@ -29,6 +29,18 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "test": "jest --passWithNoTests"
+    "test": "NODE_OPTIONS=\"--experimental-vm-modules --no-warnings=ExperimentalWarning\" jest"
+  },
+  "dependencies": {
+    "@typescript-eslint/parser": "^8.70.1",
+    "@typescript-eslint/utils": "^8.70.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/rule-tester": "^8.70.1",
+    "eslint": "^10.11.0"
+  },
+  "peerDependencies": {
+    "eslint": "^9.15.0 || ^10.0.0",
+    "typescript": ">=4.8.4 <6.1.0"
   }
 }

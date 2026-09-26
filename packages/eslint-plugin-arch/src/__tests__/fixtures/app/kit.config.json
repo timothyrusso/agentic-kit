@@ -1,0 +1,12 @@
+{
+  "projectName": "acme",
+  "lint": {
+    "allowedHooksInViews": ["useTheme", "useSafeAreaInsets"],
+    "layoutTokens": {
+      "gutterToken": "screenGutter",
+      "spacingImport": "@/features/core/design-system/tokens",
+      "allowlistFile": "layout.allow"
+    },
+    "singleSpinner": true
+  }
+}
