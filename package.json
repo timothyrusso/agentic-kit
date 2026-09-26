@@ -1,0 +1,41 @@
+{
+  "name": "agentic-kit",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared architecture for agent-driven Expo apps: Claude Code plugin, lint rules, config presets and effect-core",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22 <23"
+  },
+  "scripts": {
+    "check": "npm run lint && npm run check:text && npm run check:schema && npm run typecheck && npm run test",
+    "lint": "biome check . && eslint .",
+    "format": "biome check --write .",
+    "check:text": "node scripts/check-text.js",
+    "check:schema": "node scripts/sync-schema.js --check",
+    "sync:schema": "node scripts/sync-schema.js",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "release": "node scripts/release.js",
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.14",
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
+    "@swc/core": "^1.16.2",
+    "@swc/jest": "^0.2.39",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.20.4",
+    "eslint": "^10.11.0",
+    "jest": "^30.5.2",
+    "lefthook": "^2.1.14",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.70.1"
+  }
+}

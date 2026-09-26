@@ -1,0 +1,34 @@
+{
+  "name": "@timothyrusso/eslint-plugin-arch",
+  "version": "0.0.0",
+  "description": "ESLint rules for the agentic-kit architecture: ViewModel contract, comments, dashes, layout, stable row handlers, Effect in views.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timothyrusso/agentic-kit.git",
+    "directory": "packages/eslint-plugin-arch"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "jest --passWithNoTests"
+  }
+}
