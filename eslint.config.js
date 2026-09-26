@@ -1,25 +1,23 @@
-import tseslint from 'typescript-eslint';
+import arch, { SOURCE_FILES } from '@timothyrusso/eslint-plugin-arch';
+import kitConfig from './kit.config.json' with { type: 'json' };
 
 /**
- * ESLint covers only what Biome does not: `no-restricted-syntax` for the kit's own conventions.
- * The kit's ESLint plugin joins this config once `packages/eslint-plugin-arch` exists.
+ * ESLint covers only what Biome does not: the kit's own plugin, dogfooded through its recommended
+ * config (which also carries `no-restricted-syntax` for `enum` and `as Error`). `npm run lint`
+ * builds the plugin first, because this file loads it from `dist/`.
+ *
+ * The packages are NodeNext ESM without a path alias, so relative imports are allowed inside them,
+ * in their config files and in `scripts/`.
  */
 export default [
-  { ignores: ['**/node_modules/**', '**/dist/**', '**/coverage/**'] },
+  { ignores: ['**/node_modules/**', '**/dist/**', '**/coverage/**', '**/__tests__/fixtures/app/**'] },
+  ...arch.configs.recommended(kitConfig),
   {
-    files: ['**/*.{ts,tsx,js,mjs,cjs}'],
-    languageOptions: { parser: tseslint.parser, sourceType: 'module' },
+    files: [SOURCE_FILES],
     rules: {
-      'no-restricted-syntax': [
+      'arch/no-relative-imports': [
         'error',
-        {
-          selector: 'TSEnumDeclaration',
-          message: 'Use a union of string literals or an `as const` object, not `enum`.',
-        },
-        {
-          selector: "TSAsExpression > TSTypeReference.typeAnnotation > Identifier[name='Error']",
-          message: 'Do not cast to Error: narrow with `instanceof` or convert with a helper.',
-        },
+        { allow: ['packages/*/src', 'packages/*/*.config.js', 'scripts', '*.config.js'] },
       ],
     },
   },

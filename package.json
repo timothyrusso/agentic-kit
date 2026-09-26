@@ -13,7 +13,7 @@
   },
   "scripts": {
     "check": "npm run lint && npm run check:text && npm run check:schema && npm run check:deps && npm run typecheck && npm run test",
-    "lint": "biome check . && eslint .",
+    "lint": "biome check . && npm run build:lint-plugin && eslint .",
     "format": "biome check --write .",
     "check:text": "node scripts/check-text.js",
     "check:schema": "node scripts/sync-schema.js --check",
@@ -23,7 +23,8 @@
     "test": "npm run test --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
     "release": "node scripts/release.js",
-    "prepare": "lefthook install"
+    "prepare": "lefthook install && npm run build:lint-plugin",
+    "build:lint-plugin": "npm run build -w @timothyrusso/eslint-plugin-arch"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.14",
