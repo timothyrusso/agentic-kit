@@ -1,0 +1,15 @@
+{
+  "projectName": "arch-violations",
+  "featuresRoot": "features",
+  "appRoot": "app",
+  "lint": {
+    "dashes": "forbid",
+    "allowedHooksInViews": [],
+    "layoutTokens": {
+      "gutterToken": "screenGutter",
+      "spacingImport": "@/features/core/design-system/tokens",
+      "allowlistFile": "layout.allow"
+    },
+    "singleSpinner": true
+  }
+}
