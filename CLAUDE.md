@@ -26,6 +26,9 @@ fixtures use neutral names like `acme`. The root `kit.config.json` is the kit's 
 - No TypeScript `enum`, no `as Error`.
 - `schema/kit.config.schema.json` is the source of truth; after editing it run
   `npm run sync:schema` to refresh the copy in `packages/config-presets/src/`.
+- The root docs and `plugin/templates/ISSUE_TEMPLATE/` are the sources of the copies in
+  `plugin/docs/` and `packages/config-presets/github/ISSUE_TEMPLATE/`; after editing them run
+  `npm run sync:plugin-docs`.
 - Tests are Jest, in `src/**/__tests__/*.test.ts` per package.
 
 ## Gates
