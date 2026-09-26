@@ -27,6 +27,12 @@ export interface KitConfig {
     targets: QaTarget[];
     simulator?: string;
     metroPort?: number;
+    baseline?: {
+      setup?: string;
+      launch?: string;
+      firstScreens?: string[];
+      navigation?: string[];
+    };
   };
   lint?: {
     allowedHooksInViews: string[];
