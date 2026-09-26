@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { PACKAGE_ROOT } from './helpers.js';
@@ -58,6 +58,8 @@ describe('presets', () => {
         'Bash(git commit *--no-verify*)',
         'Bash(git push *--no-verify*)',
         'Bash(git push *--force*)',
+        'Bash(git commit -n*)',
+        'Bash(git -c core.hooksPath*)',
         'Read(~/.ssh/**)',
         'Read(./.env)',
         'Read(./.env.*)',
@@ -72,5 +74,14 @@ describe('presets', () => {
     expect(text).toContain("const marker = '<!-- arch-violations -->';");
     expect(text).toContain('runs-on: macos-latest');
     expect(text).not.toContain(`\${{ steps.arch.outputs.output }}`);
+  });
+});
+
+describe('template file names', () => {
+  it('are never ones ESLint, dependency-cruiser, Biome, Jest or commitlint would pick up as a config', () => {
+    const names = readdirSync(join(PACKAGE_ROOT, 'templates'));
+    expect(names.sort()).toEqual(['dependency-cruiser.template.mjs', 'eslint.config.template.mjs']);
+    const discovered = /^(eslint\.config|\.dependency-cruiser|biome|jest\.config|commitlint\.config|lefthook)\.[a-z]+$/;
+    expect(names.filter(name => discovered.test(name))).toEqual([]);
   });
 });

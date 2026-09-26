@@ -215,12 +215,12 @@ export async function init(options: InitOptions): Promise<number> {
     {
       to: 'eslint.config.mjs',
       rivals: ['eslint.config.js', 'eslint.config.cjs', 'eslint.config.ts', '.eslintrc.js', '.eslintrc.json'],
-      content: template('templates/eslint.config.mjs'),
+      content: template('templates/eslint.config.template.mjs'),
     },
     {
       to: '.dependency-cruiser.mjs',
       rivals: ['.dependency-cruiser.js', '.dependency-cruiser.cjs', '.dependency-cruiser.json'],
-      content: template('templates/dependency-cruiser.mjs'),
+      content: template('templates/dependency-cruiser.template.mjs'),
     },
     {
       to: 'jest.config.cjs',

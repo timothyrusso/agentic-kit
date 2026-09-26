@@ -25,7 +25,7 @@ export default {
           '(^|/)__tests__/',
           '(^|/)[^/]+\\.config\\.[cm]?js$',
           '\\.d\\.ts$',
-          '^packages/config-presets/(jest|templates)/',
+          '^packages/config-presets/jest/',
         ],
       },
       to: {},
@@ -70,7 +70,11 @@ export default {
   options: {
     doNotFollow: { path: ['node_modules'] },
     exclude: {
-      path: ['^packages/[^/]+/(dist|coverage)/', '^packages/[^/]+/src/__tests__/fixtures/app/'],
+      path: [
+        '^packages/[^/]+/(dist|coverage)/',
+        '^packages/[^/]+/src/__tests__/fixtures/app/',
+        '^packages/config-presets/templates/',
+      ],
     },
     tsPreCompilationDeps: true,
     combinedDependencies: false,
