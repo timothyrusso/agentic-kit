@@ -42,20 +42,20 @@ function isNode(value: unknown): value is TSESTree.Node {
 }
 
 /**
- * The outermost components a render function returns: the first JSX element on every path, looking
- * through fragments. Elements nested inside a row are the row's own business.
+ * The outermost elements a render function returns: the first JSX element on every path, looking
+ * through fragments. Elements nested inside a row are the row's own business. The nodes are
+ * collected, not their names, so a host element such as `View` elsewhere in the file is untouched.
  */
-function rowComponentsIn(root: TSESTree.Node, out: Set<string>): void {
+function rowElementsIn(root: TSESTree.Node, out: Set<TSESTree.JSXOpeningElement>): void {
   if (root.type === AST_NODE_TYPES.JSXElement) {
-    const name = elementName(root.openingElement.name);
-    if (/^[A-Z]/.test(lastSegment(name))) out.add(name);
+    if (/^[A-Z]/.test(lastSegment(elementName(root.openingElement.name)))) out.add(root.openingElement);
     return;
   }
   if (isFunction(root)) return;
   for (const [key, value] of Object.entries(root)) {
     if (key === 'parent') continue;
     const children: unknown[] = Array.isArray(value) ? value : [value];
-    for (const child of children) if (isNode(child)) rowComponentsIn(child, out);
+    for (const child of children) if (isNode(child)) rowElementsIn(child, out);
   }
 }
 
@@ -139,7 +139,7 @@ export const stableRowHandlers = createRule({
       },
       'Program:exit'() {
         if (lists.length === 0) return;
-        const guarded = new Set(memoComponents);
+        const rows = new Set<TSESTree.JSXOpeningElement>();
         for (const { element, scope } of lists) {
           for (const attribute of element.attributes) {
             if (attribute.type !== AST_NODE_TYPES.JSXAttribute || attribute.name.name !== 'renderItem') continue;
@@ -147,12 +147,12 @@ export const stableRowHandlers = createRule({
             const expression = attribute.value.expression;
             if (expression.type === AST_NODE_TYPES.JSXEmptyExpression) continue;
             const render = renderFunction(scope, expression);
-            if (render) rowComponentsIn(render.body, guarded);
+            if (render) rowElementsIn(render.body, rows);
           }
         }
         for (const { element, scope } of usages) {
           const component = elementName(element.name);
-          if (!guarded.has(component)) continue;
+          if (!rows.has(element) && !memoComponents.has(component)) continue;
           for (const attribute of element.attributes) {
             if (attribute.type === AST_NODE_TYPES.JSXAttribute) checkAttribute(attribute, component, scope);
           }

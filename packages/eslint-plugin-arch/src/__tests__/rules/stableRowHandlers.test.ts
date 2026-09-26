@@ -41,6 +41,35 @@ export const Screen = () => <Row onPress={() => go()} />;`,
   <FlashList data={items} renderItem={({ item }) => <Row id={item.id} style={{ flex: 1 }} title={item.title} />} />
 );`,
     },
+    {
+      name: 'a host View as the row root does not guard every View in the file',
+      code: `export const List = ({ items }) => {
+  const [h, setH] = useState(0);
+  return (
+    <View onLayout={e => setH(e.nativeEvent.layout.height)}>
+      <FlashList data={items} renderItem={({ item }) => <View style={s.row}><Row id={item.id} /></View>} />
+    </View>
+  );
+};`,
+    },
+    {
+      name: 'a Pressable row root does not guard the header Pressable',
+      code: `export const List = ({ items, navigation, onSelect }) => (
+  <>
+    <Pressable onPress={() => navigation.goBack()} />
+    <FlatList data={items} renderItem={({ item }) => <Pressable onPress={onSelect} />} />
+  </>
+);`,
+    },
+    {
+      name: 'a Text row root does not guard an unrelated Text',
+      code: `export const List = ({ items, retry }) => (
+  <>
+    <FlashList data={items} renderItem={({ item }) => <Text>{item.title}</Text>} />
+    <Text onPress={() => retry()}>Retry</Text>
+  </>
+);`,
+    },
   ],
   invalid: [
     {
