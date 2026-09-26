@@ -17,26 +17,31 @@ Shared architecture for agent-driven Expo apps. One repository, two outputs:
 
 ## Using the kit in an app
 
-1. Install the packages:
-   `npm install -D @timothyrusso/config-presets @timothyrusso/eslint-plugin-arch @timothyrusso/arch-rules`
-   and `npm install @timothyrusso/effect-core effect`.
-2. Enable the plugin in Claude Code: `/plugin marketplace add timothyrusso/agentic-kit`, then
-   `/plugin install agentic-kit`.
-3. Add a `kit.config.json` at the app root. Only `projectName` is required; the schema is
-   [`schema/kit.config.schema.json`](schema/kit.config.schema.json) and ships in the package as
-   `@timothyrusso/config-presets/kit.config.schema.json`:
+1. At the app root, run `npx @timothyrusso/config-presets init` (or `init --yes` for the
+   defaults). It writes `kit.config.json` and the Biome, commitlint, lefthook, tsconfig, Jest,
+   ESLint, dependency-cruiser, CI and Claude Code settings files, adds the `check` script, and
+   installs the tools and git hooks. See the
+   [config-presets README](packages/config-presets/README.md).
+2. `npm run check`.
+3. Enable the plugin in Claude Code: `/plugin marketplace add timothyrusso/agentic-kit`, then
+   `/plugin install agentic-kit` (the `.claude/settings.json` that `init` writes already names the
+   marketplace).
+4. `npm install @timothyrusso/effect-core effect` for the runtime.
 
-   ```json
-   {
-     "$schema": "./node_modules/@timothyrusso/config-presets/dist/kitConfig.schema.json",
-     "projectName": "acme",
-     "featuresRoot": "features",
-     "qa": { "targets": ["mobile"], "simulator": "iPhone 17 Pro", "metroPort": 8082 }
-   }
-   ```
+`kit.config.json` needs only `projectName`; the schema is
+[`schema/kit.config.schema.json`](schema/kit.config.schema.json) and ships in the package as
+`@timothyrusso/config-presets/kit.config.schema.json`:
 
-4. Copy or extend the presets from `@timothyrusso/config-presets` (Biome, lefthook, commitlint,
-   tsconfig, Jest, CI) and add `npm run check` to the app.
+```json
+{
+  "$schema": "./node_modules/@timothyrusso/config-presets/dist/kitConfig.schema.json",
+  "projectName": "acme",
+  "featuresRoot": "features",
+  "qa": { "targets": ["mobile"], "simulator": "iPhone 17 Pro", "metroPort": 8082 }
+}
+```
+
+The tools support TypeScript 5.9 and 6.x: dependency-cruiser 18 does not support TypeScript 7.
 
 Every package and the plugin read the same file through `loadKitConfig()`, which reports every
 problem at once, for example `missing required field "projectName"`.
@@ -47,6 +52,8 @@ Node 22 (`.nvmrc`). `npm install`, then:
 
 - `npm run check`: Biome, ESLint, the text guard, schema sync, `tsc --noEmit` and Jest per package.
 - `npm run build`: `tsc` for every package into `dist/`.
+- `npm run smoke:presets`: packs the packages, creates a fresh Expo app, runs `config-presets init
+  --yes` and the app's own `pr-checks.yml` checks on it (also the `presets-smoke.yml` workflow).
 - `npm run release -- <version> --issue <n>`: bumps every package and the plugin manifest, commits
   `chore(<n>): release <version>` and tags `v<version>`. Pushing the tag runs `release.yml`,
   which publishes every package (needs the `NPM_TOKEN` repository secret).
