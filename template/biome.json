@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["@timothyrusso/config-presets/biome"],
+  "files": {
+    "includes": [
+      "!**/android",
+      "!**/ios",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/coverage",
+      "!**/.expo",
+      "!**/web-build",
+      "!**/expo-env.d.ts",
+      "!__fixtures__"
+    ]
+  }
+}
