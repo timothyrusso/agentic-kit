@@ -10,19 +10,12 @@
  * jest-expo` picked for its SDK; when it is not installed the transform delta is left out, and
  * Jest cannot run anyway. An app whose alias points somewhere else overrides `moduleNameMapper` in
  * its own config.
+ *
+ * Coverage floors apply only when jest runs with `--coverage` (`npm run test:coverage`). They are global
+ * (per-file floors fail a four-line DTO at 75 percent); see the kit's TESTING.md for what is excluded.
  */
-const KIT_SCOPE = '@timothyrusso';
-
-/**
- * Adds the kit's npm scope to the `transformIgnorePatterns` of a jest-expo preset, so Babel
- * transforms `@timothyrusso/*` like the Expo packages. Returns `undefined` when the preset has no
- * patterns to extend.
- */
-function withKitTransforms(expoPreset) {
-  const patterns = expoPreset?.transformIgnorePatterns;
-  if (!Array.isArray(patterns)) return undefined;
-  return patterns.map(pattern => pattern.replace(/(\/?node_modules\/\(\?!\()/, `$1${KIT_SCOPE}|`));
-}
+// eslint-disable-next-line arch/no-relative-imports -- a shipped CJS preset resolves its sibling inside node_modules
+const { withKitTransforms } = require('./kitTransforms');
 
 // NOTE: jest-expo is the app's dependency, resolved from the app's node_modules at run time, never the
 // kit's; the name is a variable so the kit's own dependency check does not try to resolve it here.
@@ -44,7 +37,24 @@ const preset = {
   testPathIgnorePatterns: ['/node_modules/', '<rootDir>/(ios|android|dist|coverage|\\.expo)/'],
   moduleNameMapper: { '^@/(.*)$': '<rootDir>/$1' },
   ...(transformIgnorePatterns ? { transformIgnorePatterns } : {}),
+  collectCoverageFrom: [
+    '<rootDir>/**/*.{ts,tsx}',
+    '!<rootDir>/**/*.tsx',
+    '!<rootDir>/**/*.style.ts',
+    '!<rootDir>/**/*.d.ts',
+    '!<rootDir>/**/index.ts',
+    '!<rootDir>/**/pages.ts',
+    '!<rootDir>/**/di/**',
+    '!<rootDir>/**/libraries/**',
+    '!<rootDir>/**/__tests__/**',
+    '!<rootDir>/**/__fixtures__/**',
+    '!<rootDir>/**/__mocks__/**',
+    '!<rootDir>/app/**',
+    '!<rootDir>/**/features/core/testing/**',
+    '!<rootDir>/node_modules/**',
+    '!<rootDir>/(ios|android|dist|coverage|.expo)/**',
+  ],
+  coverageThreshold: { global: { lines: 70, branches: 55, functions: 70, statements: 70 } },
 };
 
 module.exports = preset;
-module.exports.withKitTransforms = withKitTransforms;

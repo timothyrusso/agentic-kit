@@ -40,8 +40,13 @@ describe('presets', () => {
     expect(preset.testMatch).toEqual(['<rootDir>/**/__tests__/**/*.test.{ts,tsx,js,jsx}']);
   });
 
-  it('jest/preset.js transforms the kit packages like the Expo ones', () => {
-    const { withKitTransforms } = require(join(PACKAGE_ROOT, 'jest/preset.js'));
+  it('jest/preset.js exports only jest options, and kitTransforms.js the helper', () => {
+    const preset = require(join(PACKAGE_ROOT, 'jest/preset.js'));
+    expect(Object.keys(preset)).not.toContain('withKitTransforms');
+  });
+
+  it('jest/kitTransforms.js transforms the kit packages like the Expo ones', () => {
+    const { withKitTransforms } = require(join(PACKAGE_ROOT, 'jest/kitTransforms.js'));
     const expo = {
       transformIgnorePatterns: [
         'node_modules/(?!((jest-)?react-native|expo(nent)?)/)',

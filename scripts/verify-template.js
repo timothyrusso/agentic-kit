@@ -12,7 +12,7 @@
  * 2. copies `template/` (the files git tracks or would track) to a fresh folder and points its four
  *    `@timothyrusso/*` dependencies at the tarballs;
  * 3. runs `git init` and `npm install` (which installs the git hooks, as a real clone would);
- * 4. runs `npm run check`, `npm test`, `npm run arch` (must pass on the app), `npm run arch:fixtures`
+ * 4. runs `npm run check`, `npm run test:coverage` (the kit's coverage floors), `npm run arch` (must pass on the app), `npm run arch:fixtures`
  *    (the fixtures must fail with exactly the kit's rules) and `npx expo export --platform ios`.
  *
  * It never starts Metro. The folder defaults to a fresh one under the system temp dir (`RUNNER_TEMP`
@@ -86,6 +86,7 @@ writeFileSync(pkgFile, `${JSON.stringify(pkg, null, 2)}\n`);
 must('git', ['init', '-q'], appDir);
 must('npm', ['install', '--no-audit', '--no-fund'], appDir);
 must('npm', ['run', 'check'], appDir);
+must('npm', ['run', 'test:coverage'], appDir);
 must('npm', ['test'], appDir);
 must('npm', ['run', 'arch'], appDir);
 must('npm', ['run', 'arch:fixtures'], appDir);

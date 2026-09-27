@@ -148,7 +148,8 @@ Go up the tiers: every feature's dependencies are already in place when it moves
 6. `facades/` over `useEffectQuery` and `useEffectMutation`; the old data hooks become facades.
 7. `ui/`: each screen split into `.tsx`, `.logic.ts` and `.style.ts`; the route file in `app/`
    becomes a one-line import from `pages.ts`.
-8. Tests: every Layer and use case against test Layers or `makeNodeSqliteLayer`.
+8. Tests: every Layer and use case against test Layers or `makeNodeSqliteLayer`, written to
+   `TESTING.md` (builders, Layer fakes, one behaviour per test, the coverage floors).
 9. Delete the old module and its re-exports.
 
 Keep each feature one change, with the gates green at the end of it. Behaviour does not change

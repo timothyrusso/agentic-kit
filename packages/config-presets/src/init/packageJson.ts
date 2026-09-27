@@ -23,6 +23,7 @@ export const APP_SCRIPTS: Readonly<Record<string, string>> = {
   'check:unused-keys': 'config-presets check-unused-keys',
   'check:hooks': 'config-presets check-hooks',
   test: 'jest --passWithNoTests',
+  'test:coverage': 'jest --coverage --passWithNoTests',
   check:
     'npm run lint && npm run typecheck && npm run check:text && npm run check:arch && npm run check:i18n && npm run check:unused-keys && npm run check:hooks && npm run test',
 };

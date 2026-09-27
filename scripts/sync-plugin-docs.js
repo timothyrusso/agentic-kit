@@ -17,7 +17,14 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const DOCS = ['ARCHITECTURE.md', 'ERROR_HANDLING.md', 'AGENTIC_WORKFLOW.md', 'EFFECT_PRIMER.md', 'MIGRATION_GUIDE.md'];
+const DOCS = [
+  'ARCHITECTURE.md',
+  'ERROR_HANDLING.md',
+  'AGENTIC_WORKFLOW.md',
+  'EFFECT_PRIMER.md',
+  'MIGRATION_GUIDE.md',
+  'TESTING.md',
+];
 const DOCS_COPY_DIR = 'plugin/docs';
 const DOCS_KEEP = new Set(['README.md']);
 const TEMPLATE_DIR = 'plugin/templates/ISSUE_TEMPLATE';

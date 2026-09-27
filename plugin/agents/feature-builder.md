@@ -20,8 +20,8 @@ and conventions exactly.
    (the hooks a view may call besides its own ViewModel hook, default none).
 2. Read the kit docs shipped with the plugin: `${CLAUDE_PLUGIN_ROOT}/docs/ARCHITECTURE.md`
    (layers, tiers, Services, Layers and the runtime, the ViewModel contract) and, before writing
-   any failure path, `${CLAUDE_PLUGIN_ROOT}/docs/ERROR_HANDLING.md`. For Effect idioms,
-   `${CLAUDE_PLUGIN_ROOT}/docs/EFFECT_PRIMER.md`.
+   any failure path, `${CLAUDE_PLUGIN_ROOT}/docs/ERROR_HANDLING.md`, and before writing any test,
+   `${CLAUDE_PLUGIN_ROOT}/docs/TESTING.md`. For Effect idioms, `${CLAUDE_PLUGIN_ROOT}/docs/EFFECT_PRIMER.md`.
 3. Then the app's `docs/ARCHITECTURE.md` (its deltas; they win on conflict) and `CLAUDE.md`.
    If a kit doc is missing, the rules in this prompt still hold.
 
@@ -101,9 +101,13 @@ If a rule conflicts with the issue, STOP and report the conflict instead of gues
    one, otherwise from the docs above and Grep, Glob and Read. Find the feature folder, the
    pattern to mirror and the integration points; before changing an existing symbol, check who
    uses it so the diff stays minimal.
-3. Implement the change, with tests: jest, in `__tests__/` next to the code. Use cases are
-   tested with `itEffect` and Layers from `@timothyrusso/effect-core/testing` (`makeNodeSqliteLayer`,
-   `collectLogs`, `advanceClock`), not with mocks of the runtime.
+3. Implement the change, with tests written to `TESTING.md` (in the plugin docs): jest, in
+   `__tests__/` next to the code; one behaviour per `it`, named in plain words; builders with a
+   complete base (`anItem(overrides)`) instead of hand-rolled objects; fakes are plain objects
+   provided as Layers (`itEffect`, `makeNodeSqliteLayer`, `collectLogs`, `advanceClock` from
+   `@timothyrusso/effect-core/testing`), never `jest.mock` of something that has a Tag; every
+   failure path has a test that asserts the error tag and what did not happen; ViewModels are
+   tested with `renderHook`, never by rendering a `.tsx`. Assert results, never calls.
 4. Verify ONCE per build, after implementing and before the commit sequence (and once more per
    fix round): `npm run check`. It runs Biome, ESLint, the text guard, the dependency-cruiser
    architecture rules, tsc and jest over the whole tree, so repeating it per commit is waste.

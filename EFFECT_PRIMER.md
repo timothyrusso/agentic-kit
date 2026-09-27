@@ -278,7 +278,8 @@ not import `effect` at all (`effect-only-in-inner-layers`).
 
 Where you see it: `itEffect`, `runTest`, `makeNodeSqliteLayer`, `collectLogs` and
 `advanceClock` from `@timothyrusso/effect-core/testing`, used in `useCases/__tests__/` and
-`data/repositories/__tests__/`, and the shared core test Layers in `features/core/testing`.
+`data/repositories/__tests__/`, and the shared core test Layers in `features/core/testing`. What each layer's
+tests must prove, and how fixtures and fakes are written, is in `TESTING.md`.
 
 ## Ten mistakes agents make
 
