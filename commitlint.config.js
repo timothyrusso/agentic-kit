@@ -18,6 +18,7 @@ export default {
   rules: {
     'type-enum': [2, 'always', ['feat', 'fix', 'chore', 'docs', 'refactor', 'test', 'ci', 'perf', 'build']],
     'scope-empty': [2, 'never'],
+    'subject-case': [0],
     'scope-issue-number': [2, 'always'],
     'no-co-author': [2, 'always'],
   },
