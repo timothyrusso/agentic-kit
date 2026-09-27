@@ -1,6 +1,6 @@
 {
   "name": "@timothyrusso/config-presets",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Biome, commitlint, lefthook, tsconfig, Jest and CI presets, the kit.config.json loader, the check scripts and the init command.",
   "license": "MIT",
   "type": "module",
@@ -54,8 +54,8 @@
     "jiti": "^2.7.0"
   },
   "peerDependencies": {
-    "@timothyrusso/arch-rules": "0.1.1",
-    "@timothyrusso/eslint-plugin-arch": "0.1.1",
+    "@timothyrusso/arch-rules": "0.1.2",
+    "@timothyrusso/eslint-plugin-arch": "0.1.2",
     "jest-expo": "*"
   },
   "peerDependenciesMeta": {

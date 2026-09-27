@@ -1,6 +1,6 @@
 {
   "name": "@timothyrusso/arch-rules",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "dependency-cruiser rule generators for feature tiers, layers and Effect placement.",
   "license": "MIT",
   "type": "module",

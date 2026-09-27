@@ -1,6 +1,6 @@
 {
   "name": "@timothyrusso/effect-core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Shared Effect layer: AppError, Logger, Config, runtime, SqliteClient, React hooks and testing helpers.",
   "license": "MIT",
   "type": "module",
