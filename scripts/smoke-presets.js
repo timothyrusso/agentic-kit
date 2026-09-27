@@ -11,8 +11,9 @@
  *    (the file `init` copied), as a push event would: `npm ci`, the architecture check,
  *    `npm run check` and `npx expo export --platform ios`. `uses:` steps (checkout, setup-node,
  *    the PR comment) and PR-only steps are skipped and listed.
- * 5. Adds a translated catalog and a feature with a tier: `npm run check` must still pass, and must
- *    fail on a key removed from `it.ts` and on a Tier 0 feature importing a Tier 1 one.
+ * 5. Adds a translated catalog, a feature with a tier and a test importing effect-core: `npm run check`
+ *    must still pass (so the kit ES modules run under Jest), and must fail on a key removed from
+ *    `it.ts` and on a Tier 0 feature importing a Tier 1 one.
  * 6. Commits through the installed lefthook hooks: `chore(1): ...` must pass and a message without
  *    an issue number must be rejected.
  *
@@ -26,7 +27,12 @@ import { parse } from 'yaml';
 
 const CREATE_EXPO_APP = 'create-expo-app@5.0.0';
 const TEMPLATE = 'blank-typescript@sdk-57';
-const PACKAGES = ['@timothyrusso/config-presets', '@timothyrusso/eslint-plugin-arch', '@timothyrusso/arch-rules'];
+const PACKAGES = [
+  '@timothyrusso/config-presets',
+  '@timothyrusso/eslint-plugin-arch',
+  '@timothyrusso/arch-rules',
+  '@timothyrusso/effect-core',
+];
 const EVENT = 'push';
 
 const repo = resolve(import.meta.dirname, '..');
@@ -140,6 +146,17 @@ write({
   'features/greeting/domain/greeting.ts': "export const greetingKey = 'greeting.hello';\n",
 });
 must('npx', ['--no-install', 'biome', 'format', '--write', 'kit.config.json'], appDir);
+must('npm', ['install', '--no-audit', '--no-fund', 'effect'], appDir);
+write({
+  '__tests__/effectCore.test.ts': [
+    "import { toAppError } from '@timothyrusso/effect-core';",
+    '',
+    "it('imports the kit packages under jest', () => {",
+    "  expect(toAppError(new Error('boom'))._tag).toBe('UnexpectedError');",
+    '});',
+    '',
+  ].join('\n'),
+});
 must('npm', ['run', 'check'], appDir);
 
 write({ 'i18n/it.ts': 'export const it = {\n  greeting: {},\n};\n' });

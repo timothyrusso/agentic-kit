@@ -48,6 +48,8 @@ interface Answers {
 }
 
 const TSCONFIG_PRESET = '@timothyrusso/config-presets/tsconfig/expo.json';
+/** Jest globals (`it`, `expect`) in test files: `expo/tsconfig.base` would otherwise leave them out of the typecheck. */
+const JEST_TYPES = ['jest'];
 const SCHEMA_PATH = './node_modules/@timothyrusso/config-presets/dist/kitConfig.schema.json';
 
 function readJson<T>(file: string): T {
@@ -266,7 +268,10 @@ export async function init(options: InitOptions): Promise<number> {
   const tsconfigFile = join(cwd, 'tsconfig.json');
   const alias = { '@/*': [`./${aliasRoot(featuresRoot)}*`] };
   if (!existsSync(tsconfigFile)) {
-    writeFileSync(tsconfigFile, json({ extends: TSCONFIG_PRESET, compilerOptions: { paths: alias } }));
+    writeFileSync(
+      tsconfigFile,
+      json({ extends: TSCONFIG_PRESET, compilerOptions: { paths: alias, types: JEST_TYPES } }),
+    );
     touched.push('tsconfig.json');
     report('wrote', 'tsconfig.json');
   } else {
@@ -284,6 +289,7 @@ export async function init(options: InitOptions): Promise<number> {
       }
       tsconfig.compilerOptions = { ...(tsconfig.compilerOptions ?? {}) };
       tsconfig.compilerOptions.paths ??= alias;
+      tsconfig.compilerOptions.types ??= JEST_TYPES;
       writeFileSync(tsconfigFile, json(tsconfig));
       touched.push('tsconfig.json');
       report('merged', 'tsconfig.json');
