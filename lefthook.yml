@@ -1,0 +1,18 @@
+pre-commit:
+  parallel: true
+  commands:
+    biome:
+      glob: "*.{js,ts,tsx,json,jsonc}"
+      run: npx biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+    eslint:
+      glob: "*.{js,ts,tsx}"
+      run: npx eslint --no-warn-ignored {staged_files}
+    text:
+      run: node scripts/check-text.js {staged_files}
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx --no-install commitlint --edit {1}
+    text:
+      run: node scripts/check-text.js --message {1}

@@ -1,0 +1,12 @@
+{
+  "extends": "@timothyrusso/config-presets/tsconfig/expo.json",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "types": ["jest"]
+  },
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
+  "exclude": ["node_modules", "__fixtures__"]
+}

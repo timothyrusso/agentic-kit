@@ -1,0 +1,163 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/timothyrusso/agentic-kit/schema/kit.config.schema.json",
+  "title": "kit.config.json",
+  "description": "Per-app configuration read by every agentic-kit package and by the Claude Code plugin.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["projectName"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "projectName": {
+      "description": "Human name of the app, used in agent prompts and run markers.",
+      "type": "string",
+      "minLength": 1
+    },
+    "featuresRoot": {
+      "description": "Folder that holds the feature modules.",
+      "enum": ["features", "src/features"],
+      "default": "features"
+    },
+    "appRoot": {
+      "description": "expo-router app folder.",
+      "type": "string",
+      "minLength": 1,
+      "default": "app"
+    },
+    "github": {
+      "description": "GitHub Projects board the agents move issues on.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projectNumber", "projectId", "statusFieldId", "statusOptions"],
+      "properties": {
+        "projectNumber": { "type": "integer", "minimum": 1 },
+        "projectId": { "type": "string", "minLength": 1 },
+        "statusFieldId": { "type": "string", "minLength": 1 },
+        "statusOptions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["todo", "inProgress", "done"],
+          "properties": {
+            "todo": { "type": "string", "minLength": 1 },
+            "inProgress": { "type": "string", "minLength": 1 },
+            "done": { "type": "string", "minLength": 1 }
+          }
+        },
+        "labels": {
+          "description": "Labels the agents may apply to issues they write.",
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "default": []
+        }
+      }
+    },
+    "qa": {
+      "description": "Where the QA agents run the app.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["targets"],
+      "properties": {
+        "targets": {
+          "type": "array",
+          "items": { "enum": ["mobile", "web"] },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "simulator": {
+          "description": "Simulator or device name, e.g. iPhone 17 Pro.",
+          "type": "string",
+          "minLength": 1
+        },
+        "metroPort": { "type": "integer", "minimum": 1024, "maximum": 65535 },
+        "baseline": {
+          "description": "App-specific steps of the baseline QA checks that run for every feature.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "setup": {
+              "description": "What to do before the checks, e.g. how to sign in with the test account.",
+              "type": "string",
+              "minLength": 1
+            },
+            "launch": {
+              "description": "What a healthy cold launch reaches, e.g. the Home tab with the greeting.",
+              "type": "string",
+              "minLength": 1
+            },
+            "firstScreens": {
+              "description": "Screens that must render right after launch.",
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "navigation": {
+              "description": "Primary navigation steps to exercise, one per entry.",
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            }
+          }
+        }
+      }
+    },
+    "lint": {
+      "description": "Options for the kit's lint rules.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowedHooksInViews": {
+          "description": "Hooks a view may call besides its own ViewModel hook.",
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "default": []
+        },
+        "dashes": {
+          "description": "Whether em and en dashes are forbidden in code, comments and copy.",
+          "enum": ["forbid", "allow"],
+          "default": "forbid"
+        },
+        "layoutTokens": {
+          "description": "Horizontal spacing tokens checked by the layout rule.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["gutterToken", "spacingImport", "allowlistFile"],
+          "properties": {
+            "gutterToken": {
+              "description": "Name of the only horizontal edge token.",
+              "type": "string",
+              "minLength": 1
+            },
+            "spacingImport": { "description": "Import path of the spacing tokens.", "type": "string", "minLength": 1 },
+            "allowlistFile": {
+              "description": "File listing paths exempt from the rule.",
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "singleSpinner": {
+          "description": "Forbid ActivityIndicator in favour of the design system spinner.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "i18n": {
+      "description": "Translation catalog checked by the parity and unused-key scripts.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["catalogPath", "languages"],
+      "properties": {
+        "catalogPath": { "type": "string", "minLength": 1 },
+        "languages": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 2 },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

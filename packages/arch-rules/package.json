@@ -1,0 +1,40 @@
+{
+  "name": "@timothyrusso/arch-rules",
+  "version": "0.1.0",
+  "description": "dependency-cruiser rule generators for feature tiers, layers and Effect placement.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timothyrusso/agentic-kit.git",
+    "directory": "packages/arch-rules"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "NODE_OPTIONS=\"--experimental-vm-modules --no-warnings=ExperimentalWarning\" jest"
+  },
+  "devDependencies": {
+    "dependency-cruiser": "^18.4.0"
+  },
+  "peerDependencies": {
+    "dependency-cruiser": "^18.0.0"
+  }
+}

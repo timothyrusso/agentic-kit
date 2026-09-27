@@ -1,0 +1,18 @@
+{
+  "$schema": "./schema/kit.config.schema.json",
+  "projectName": "agentic-kit",
+  "github": {
+    "projectNumber": 2,
+    "projectId": "PVT_kwHOBRsxCs4BkyPM",
+    "statusFieldId": "PVTSSF_lAHOBRsxCs4BkyPMzhjhjoc",
+    "statusOptions": {
+      "todo": "f75ad846",
+      "inProgress": "47fc9ee4",
+      "done": "98236657"
+    },
+    "labels": ["bug", "documentation", "enhancement", "epic"]
+  },
+  "lint": {
+    "dashes": "forbid"
+  }
+}

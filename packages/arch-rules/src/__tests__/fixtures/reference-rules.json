@@ -1,0 +1,538 @@
+[
+  {
+    "name": "domain-no-cross-feature-runtime-import",
+    "severity": "error",
+    "from": {
+      "path": "/domain/"
+    },
+    "to": {
+      "path": "^features/.*/index\\.ts$",
+      "pathNot": "^features/core/error/",
+      "dependencyTypes": ["import"]
+    }
+  },
+  {
+    "name": "domain-no-outer-layer-import",
+    "severity": "error",
+    "from": {
+      "path": "/domain/"
+    },
+    "to": {
+      "path": "/(data|useCases|facades|ui|state|hooks|libraries|di|mappers|design-system)/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-ai",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/ai/"
+    },
+    "to": {
+      "path": "^features/ai/",
+      "pathNot": "^features/ai/(index|pages)\\.ts$|^features/ai/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-auth",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/auth/"
+    },
+    "to": {
+      "path": "^features/auth/",
+      "pathNot": "^features/auth/(index|pages)\\.ts$|^features/auth/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-container",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/container/"
+    },
+    "to": {
+      "path": "^features/core/container/",
+      "pathNot": "^features/core/container/(index|pages)\\.ts$|^features/core/container/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-dates",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/dates/"
+    },
+    "to": {
+      "path": "^features/core/dates/",
+      "pathNot": "^features/core/dates/(index|pages)\\.ts$|^features/core/dates/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-design-system",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/design-system/"
+    },
+    "to": {
+      "path": "^features/core/design-system/",
+      "pathNot": "^features/core/design-system/(index|pages)\\.ts$|^features/core/design-system/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-error",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/error/"
+    },
+    "to": {
+      "path": "^features/core/error/",
+      "pathNot": "^features/core/error/(index|pages)\\.ts$|^features/core/error/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-http",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/http/"
+    },
+    "to": {
+      "path": "^features/core/http/",
+      "pathNot": "^features/core/http/(index|pages)\\.ts$|^features/core/http/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-images",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/images/"
+    },
+    "to": {
+      "path": "^features/core/images/",
+      "pathNot": "^features/core/images/(index|pages)\\.ts$|^features/core/images/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-navigation",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/navigation/"
+    },
+    "to": {
+      "path": "^features/core/navigation/",
+      "pathNot": "^features/core/navigation/(index|pages)\\.ts$|^features/core/navigation/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-network",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/network/"
+    },
+    "to": {
+      "path": "^features/core/network/",
+      "pathNot": "^features/core/network/(index|pages)\\.ts$|^features/core/network/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-performance",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/performance/"
+    },
+    "to": {
+      "path": "^features/core/performance/",
+      "pathNot": "^features/core/performance/(index|pages)\\.ts$|^features/core/performance/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-query",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/query/"
+    },
+    "to": {
+      "path": "^features/core/query/",
+      "pathNot": "^features/core/query/(index|pages)\\.ts$|^features/core/query/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-sentry",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/sentry/"
+    },
+    "to": {
+      "path": "^features/core/sentry/",
+      "pathNot": "^features/core/sentry/(index|pages)\\.ts$|^features/core/sentry/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-state",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/state/"
+    },
+    "to": {
+      "path": "^features/core/state/",
+      "pathNot": "^features/core/state/(index|pages)\\.ts$|^features/core/state/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-storage",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/storage/"
+    },
+    "to": {
+      "path": "^features/core/storage/",
+      "pathNot": "^features/core/storage/(index|pages)\\.ts$|^features/core/storage/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-toast",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/toast/"
+    },
+    "to": {
+      "path": "^features/core/toast/",
+      "pathNot": "^features/core/toast/(index|pages)\\.ts$|^features/core/toast/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-core-translations",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/core/translations/"
+    },
+    "to": {
+      "path": "^features/core/translations/",
+      "pathNot": "^features/core/translations/(index|pages)\\.ts$|^features/core/translations/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-profile",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/profile/"
+    },
+    "to": {
+      "path": "^features/profile/",
+      "pathNot": "^features/profile/(index|pages)\\.ts$|^features/profile/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-trip-generation",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/trip-generation/"
+    },
+    "to": {
+      "path": "^features/trip-generation/",
+      "pathNot": "^features/trip-generation/(index|pages)\\.ts$|^features/trip-generation/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-trips",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/trips/"
+    },
+    "to": {
+      "path": "^features/trips/",
+      "pathNot": "^features/trips/(index|pages)\\.ts$|^features/trips/assets/"
+    }
+  },
+  {
+    "name": "enforce-index-boundary-features-user",
+    "severity": "error",
+    "from": {
+      "pathNot": "^features/user/"
+    },
+    "to": {
+      "path": "^features/user/",
+      "pathNot": "^features/user/(index|pages)\\.ts$|^features/user/assets/"
+    }
+  },
+  {
+    "name": "no-circular",
+    "severity": "error",
+    "from": {},
+    "to": {
+      "circular": true
+    }
+  },
+  {
+    "name": "no-tier-violation-features-ai",
+    "severity": "error",
+    "from": {
+      "path": "^features/ai/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/ai/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-auth",
+    "severity": "error",
+    "from": {
+      "path": "^features/auth/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/auth/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-container",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/container/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/container/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-dates",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/dates/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/dates/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-design-system",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/design-system/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/design-system/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-error",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/error/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/error/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-http",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/http/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/http/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-images",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/images/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/images/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-navigation",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/navigation/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/navigation/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-network",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/network/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/network/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-performance",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/performance/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/performance/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-query",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/query/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/query/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-sentry",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/sentry/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/sentry/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-state",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/state/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/state/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-storage",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/storage/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/storage/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-toast",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/toast/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/toast/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-core-translations",
+    "severity": "error",
+    "from": {
+      "path": "^features/core/translations/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/core/translations/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-profile",
+    "severity": "error",
+    "from": {
+      "path": "^features/profile/"
+    },
+    "to": {
+      "path": "^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/profile/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-trip-generation",
+    "severity": "error",
+    "from": {
+      "path": "^features/trip-generation/"
+    },
+    "to": {
+      "path": "^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/trip-generation/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-trips",
+    "severity": "error",
+    "from": {
+      "path": "^features/trips/"
+    },
+    "to": {
+      "path": "^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/trips/"
+    }
+  },
+  {
+    "name": "no-tier-violation-features-user",
+    "severity": "error",
+    "from": {
+      "path": "^features/user/"
+    },
+    "to": {
+      "path": "^features/ai/|^features/auth/|^features/user/|^features/trips/|^features/profile/|^features/trip-generation/",
+      "pathNot": "^features/user/"
+    }
+  },
+  {
+    "name": "tsx-no-cross-feature-public-api",
+    "severity": "error",
+    "from": {
+      "path": "\\.tsx$",
+      "pathNot": "^app/"
+    },
+    "to": {
+      "path": "^features/.*/index\\.ts$",
+      "pathNot": "^features/core/(navigation|design-system)/",
+      "dependencyTypesNot": ["type-only"]
+    }
+  },
+  {
+    "name": "tsx-no-direct-layer-import",
+    "severity": "error",
+    "from": {
+      "path": "\\.tsx$"
+    },
+    "to": {
+      "path": "/(facades|data|useCases|di|state|hooks|libraries|mappers)/"
+    }
+  },
+  {
+    "name": "tsx-no-runtime-domain-import",
+    "severity": "error",
+    "from": {
+      "path": "\\.tsx$"
+    },
+    "to": {
+      "path": "/domain/",
+      "dependencyTypesNot": ["type-only"]
+    }
+  },
+  {
+    "name": "usecases-no-data-import",
+    "severity": "error",
+    "from": {
+      "path": "/useCases/"
+    },
+    "to": {
+      "path": "/data/"
+    }
+  }
+]

@@ -1,0 +1,2 @@
+# Files arch/no-literal-gutter skips, one path or glob per line, relative to the app root.
+# Keep it empty unless a file places content by measured offsets (a chart's axis labels, say).

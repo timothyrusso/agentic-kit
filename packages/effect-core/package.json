@@ -1,0 +1,58 @@
+{
+  "name": "@timothyrusso/effect-core",
+  "version": "0.1.0",
+  "description": "Shared Effect layer: AppError, Logger, Config, runtime, SqliteClient, React hooks and testing helpers.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timothyrusso/agentic-kit.git",
+    "directory": "packages/effect-core"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "default": "./dist/testing/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "NODE_OPTIONS=\"--no-warnings=ExperimentalWarning\" jest"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.0.0",
+    "effect": "^3.22.0",
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@tanstack/react-query": "^5.104.0",
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.3.0",
+    "effect": "^3.22.2",
+    "jest-environment-jsdom": "^30.5.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  }
+}

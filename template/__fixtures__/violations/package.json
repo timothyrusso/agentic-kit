@@ -1,0 +1,8 @@
+{
+  "name": "arch-violations",
+  "private": true,
+  "description": "Deliberate violations of every kit rule. Run by npm run arch:fixtures in the template root.",
+  "scripts": {
+    "arch": "config-presets check-deps && eslint --config eslint.fixtures.mjs ."
+  }
+}
