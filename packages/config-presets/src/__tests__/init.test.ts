@@ -98,10 +98,10 @@ describe('init --yes --no-install on a fresh Expo app', () => {
     );
   });
 
-  it('points tsconfig.json at the preset and adds the @/ alias', () => {
+  it('points tsconfig.json at the preset, adds the @/ alias and the jest types', () => {
     expect(readJson(root, 'tsconfig.json')).toEqual({
       extends: '@timothyrusso/config-presets/tsconfig/expo.json',
-      compilerOptions: { strict: true, paths: { '@/*': ['./*'] } },
+      compilerOptions: { strict: true, paths: { '@/*': ['./*'] }, types: ['jest'] },
     });
   });
 
@@ -178,6 +178,7 @@ describe('init answers and conflicts', () => {
       i18n: { catalogPath: 'src/i18n', languages: ['en', 'it'] },
     });
     expect(readJson(root, 'tsconfig.json').compilerOptions.paths).toEqual({ '@/*': ['./src/*'] });
+    expect(readJson(root, 'tsconfig.json').compilerOptions.types).toEqual(['jest']);
     expect(readFileSync(join(root, 'jest.config.cjs'), 'utf8')).toContain("'<rootDir>/src/$1'");
   });
 

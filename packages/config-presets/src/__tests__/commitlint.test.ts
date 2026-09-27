@@ -23,6 +23,10 @@ describe('commitlint preset', () => {
     expect(await check('feat(settings): add the settings screen')).toEqual(['scope-issue-number']);
   });
 
+  it('accepts proper nouns in the subject', async () => {
+    expect(await check('docs(9): architecture and the Effect primer')).toEqual([]);
+  });
+
   it('allows only the kit types', async () => {
     expect(await check('style(12): tidy')).toEqual(['type-enum']);
   });

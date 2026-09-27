@@ -55,13 +55,17 @@
   },
   "peerDependencies": {
     "@timothyrusso/arch-rules": "0.1.0",
-    "@timothyrusso/eslint-plugin-arch": "0.1.0"
+    "@timothyrusso/eslint-plugin-arch": "0.1.0",
+    "jest-expo": "*"
   },
   "peerDependenciesMeta": {
     "@timothyrusso/arch-rules": {
       "optional": true
     },
     "@timothyrusso/eslint-plugin-arch": {
+      "optional": true
+    },
+    "jest-expo": {
       "optional": true
     }
   },
