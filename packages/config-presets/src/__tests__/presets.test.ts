@@ -40,6 +40,21 @@ describe('presets', () => {
     expect(preset.testMatch).toEqual(['<rootDir>/**/__tests__/**/*.test.{ts,tsx,js,jsx}']);
   });
 
+  it('jest/preset.js transforms the kit packages like the Expo ones', () => {
+    const { withKitTransforms } = require(join(PACKAGE_ROOT, 'jest/preset.js'));
+    const expo = {
+      transformIgnorePatterns: [
+        'node_modules/(?!((jest-)?react-native|expo(nent)?)/)',
+        '/node_modules/(?!(react-navigation)/)',
+      ],
+    };
+    expect(withKitTransforms(expo)).toEqual([
+      'node_modules/(?!(@timothyrusso|(jest-)?react-native|expo(nent)?)/)',
+      '/node_modules/(?!(@timothyrusso|react-navigation)/)',
+    ]);
+    expect(withKitTransforms({})).toBeUndefined();
+  });
+
   it('biome/base.json carries no app-specific paths', () => {
     const text = read('biome/base.json');
     expect(text).not.toMatch(/convex|storybook|createSelectors|claude/i);
