@@ -143,6 +143,7 @@ if (options.dryRun) {
 }
 
 execFileSync('npm', ['install', '--package-lock-only', '--ignore-scripts'], { stdio: 'inherit' });
+execFileSync('npx', ['biome', 'format', '--write', '--no-errors-on-unmatched', ...touched], { stdio: 'inherit' });
 execFileSync('git', ['add', ...touched, 'package-lock.json'], { stdio: 'inherit' });
 execFileSync('git', ['commit', '-m', message], { stdio: 'inherit' });
 execFileSync('git', ['tag', '-a', tag, '-m', message], { stdio: 'inherit' });
