@@ -31,6 +31,7 @@ const EXPO_APP = {
 };
 
 const readJson = (root: string, file: string) => JSON.parse(readFileSync(join(root, file), 'utf8'));
+const KIT_RANGE = `^${readJson(PACKAGE_ROOT, 'package.json').version}`;
 
 async function runInit(root: string, flags: InitFlags = {}, extra: { force?: boolean; ask?: boolean } = {}) {
   const lines: string[] = [];
@@ -137,9 +138,9 @@ describe('init --yes --no-install on a fresh Expo app', () => {
     const pkg = readJson(root, 'package.json');
     expect(pkg.scripts).toEqual({ start: 'expo start', ...APP_SCRIPTS, prepare: 'lefthook install' });
     expect(pkg.devDependencies).toMatchObject({
-      '@timothyrusso/config-presets': '^0.0.0',
-      '@timothyrusso/arch-rules': '^0.0.0',
-      '@timothyrusso/eslint-plugin-arch': '^0.0.0',
+      '@timothyrusso/config-presets': KIT_RANGE,
+      '@timothyrusso/arch-rules': KIT_RANGE,
+      '@timothyrusso/eslint-plugin-arch': KIT_RANGE,
       'dependency-cruiser': '^18.4.0',
       typescript: '~6.0.3',
     });
