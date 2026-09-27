@@ -18,7 +18,8 @@ runtime. You are **read-only**: you report findings, you do **not** edit code.
 
 1. Read `kit.config.json` at the repository root: `projectName`, `featuresRoot` (default
    `features`), `appRoot` (default `app`), `lint.allowedHooksInViews` (default none).
-2. Read `${CLAUDE_PLUGIN_ROOT}/docs/ARCHITECTURE.md` and `${CLAUDE_PLUGIN_ROOT}/docs/ERROR_HANDLING.md`:
+2. Read `${CLAUDE_PLUGIN_ROOT}/docs/ARCHITECTURE.md`, `${CLAUDE_PLUGIN_ROOT}/docs/ERROR_HANDLING.md` and
+   `${CLAUDE_PLUGIN_ROOT}/docs/TESTING.md` (its closing checklist is the test review):
    the authoritative rules, with their deliberate **exceptions**.
 3. Then the app's `docs/ARCHITECTURE.md` (its deltas; they win on conflict) and `CLAUDE.md`.
    Never flag a documented exception as a violation.
@@ -74,8 +75,11 @@ see, plus real correctness.
 2. **Correctness:** logic bugs, missing error or edge handling, unhandled async failure,
    interruption and cleanup (a subscription or timer an Effect starts but never releases),
    obvious performance traps, and whether the code plausibly satisfies the issue's
-   `### Description` and `### Acceptance criteria`. Tests: new use cases have jest tests with
-   `itEffect` and Layers; a new error tag has a test that reaches it.
+   `### Description` and `### Acceptance criteria`. Tests: apply the reviewer's checklist at the end of `TESTING.md` (plugin docs); each
+   item there is a blocking finding: a call assertion instead of a result, a mock of something
+   that has a Tag, a failure path with no test reaching it, a hand-rolled fixture where a builder
+   exists, uncontrolled time or ids, two behaviours in one `it`, a regenerated format fixture, an
+   undisposed runtime, a rendered `.tsx`, a snapshot.
 3. **Codetag inventory, always non-blocking.** List every `// NOTE:` and `// HACK:` the diff
    *adds*, with its `file:line` and full text. Pass no judgement: `arch/no-inline-comments`
    already decides what may exist, and codetag approval happens in a planning conversation you

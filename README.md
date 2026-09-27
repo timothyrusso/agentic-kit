@@ -83,6 +83,7 @@ Conventions are in [CLAUDE.md](CLAUDE.md); releasing, lockstep versions and addi
 | [ERROR_HANDLING.md](ERROR_HANDLING.md) | `Effect<A, E, R>`, tagged errors and the closed `AppError` union, logging at the runtime boundary, boot and migration failures |
 | [AGENTIC_WORKFLOW.md](AGENTIC_WORKFLOW.md) | `kit.config.json`, installing the plugin, the pipeline, bot triage and the overnight runbook |
 | [EFFECT_PRIMER.md](EFFECT_PRIMER.md) | A short study document on Effect as the kit uses it |
+| [TESTING.md](TESTING.md) | What each layer's tests prove, builders and Layer fakes, coverage floors, the reviewer's checklist |
 | [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) | How an existing Expo app adopts the kit |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Working on the kit: gates, releases, adding a rule, docs sync |
 
