@@ -1,6 +1,6 @@
 {
   "name": "@timothyrusso/eslint-plugin-arch",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ESLint rules for the agentic-kit architecture: ViewModel contract, comments, dashes, layout, stable row handlers, Effect in views.",
   "license": "MIT",
   "type": "module",
