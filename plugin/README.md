@@ -53,7 +53,7 @@ plugin or the app. Skills are invoked as
 | --- | --- |
 | `projectName` | every prompt, and the run comment and visual summary markers (`<!-- <slug>:pipeline-run -->`, `<!-- <slug>:visual-summary -->`) |
 | `featuresRoot`, `appRoot` | explorer, feature-builder, code-reviewer, finding-vetter |
-| `github.projectNumber`, `projectId`, `statusFieldId`, `statusOptions`, `labels` | write-issue (Status `todo`), the workflow's PR wiring (Status `inProgress`) |
+| `github.projectNumber`, `projectId`, `statusFieldId`, `statusOptions`, `labels` | write-issue (Status `todo`), the workflow's PR wiring (the issue's own item to Status `inProgress`); `statusOptions.done` is optional, the board's built-in workflows set Done |
 | `qa.targets` | the QA surfaces the explorer may choose, and the fallback when it cannot decide |
 | `qa.simulator`, `qa.metroPort` | qa-engineer (device choice, Metro port), qa-web-engineer (port) |
 | `qa.baseline` | qa-baseline: `setup`, `launch`, `firstScreens`, `navigation` |
