@@ -94,6 +94,37 @@ describe('implement-issue-pipeline: stages', () => {
     expect(wire.prompt).toContain('--add-assignee @me');
   });
 
+  it('moves the issue item to In progress and never adds the PR to the board', async () => {
+    const { calls } = await runPipeline({ issue: 42, kitConfig, qa: false });
+    const wire = calls.find(call => call.key === 'wire').prompt;
+    expect(wire).toContain('issueUrl=$(gh issue view 42 --json url --jq .url)');
+    expect(wire).toContain('--url "$issueUrl"');
+    expect(wire).not.toContain('--url https://github.com/acme/app/pull/12');
+    expect(wire).not.toContain('opt-done');
+  });
+
+  it('degrades without aborting when the gh token lacks the project scope', async () => {
+    const { calls } = await runPipeline({ issue: 42, kitConfig, qa: false });
+    const wire = calls.find(call => call.key === 'wire').prompt;
+    expect(wire).toContain('do NOT abort');
+    expect(wire).toContain('gh auth refresh -s project');
+  });
+
+  it('wires the board from a config without a done status option', async () => {
+    const { done: _omitted, ...statusOptions } = kitConfig.github.statusOptions;
+    const { calls } = await runPipeline({
+      issue: 42,
+      kitConfig: { ...kitConfig, github: { ...kitConfig.github, statusOptions } },
+      qa: false,
+    });
+    expect(calls.find(call => call.key === 'wire').prompt).toContain('--single-select-option-id opt-doing');
+  });
+
+  it('asks the builder for a branch linked to the issue', async () => {
+    const { calls } = await runPipeline({ issue: 42, kitConfig, qa: false });
+    expect(calls.find(call => call.key === 'feature-builder').prompt).toContain('feature/42 linked to the issue');
+  });
+
   it('skips the board step when kit.config.json has no github section', async () => {
     const { calls } = await runPipeline({ issue: 42, kitConfig: { projectName: 'acme' }, qa: false });
     expect(calls.find(call => call.key === 'wire').prompt).toContain('no `github` section');
