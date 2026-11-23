@@ -116,13 +116,22 @@ If a rule conflicts with the issue, STOP and report the conflict instead of gues
 
 ## Git workflow: a reviewable pull request
 
-1. **Branch.** Check whether `feature/<issue-number>` exists (`git rev-parse --verify
-   feature/<issue-number>` or `gh pr list --head feature/<issue-number>`):
-   - **Fresh build:** it does not exist, so create it explicitly off the up-to-date remote
-     default branch: `git fetch origin main && git checkout -b feature/<issue-number> origin/main`.
-     Never branch from whatever HEAD happens to be checked out, and never commit on `main`.
-   - **Fix mode:** it exists (you were given findings), so check it out and continue on it. Do
-     NOT create a new branch or a new PR; the PR updates when you push.
+1. **Branch.** The mode follows the PR, not the branch: check `gh pr list --head
+   feature/<issue-number>`. A remote `feature/<issue-number>` with no PR is still a fresh build,
+   because the branch may have been created ahead of the build by `gh issue develop`.
+   - **Fresh build:** there is no PR. The branch must be linked to the issue, so the PR opened
+     from it links itself (and closes the issue on merge) with no closing keyword in the empty
+     body. Check for the remote branch with `git ls-remote --heads origin feature/<issue-number>`
+     (`git rev-parse --verify` sees local branches only). If it is absent, create it linked:
+     `gh issue develop <issue-number> --name feature/<issue-number> --base main` (this only
+     creates the remote branch; `gh issue develop` fails when the name already exists, so never
+     run it when the branch is there). Then create the local branch explicitly off the
+     up-to-date remote default branch: `git fetch origin main feature/<issue-number> && git
+     checkout -b feature/<issue-number> origin/main`, and push to the remote branch, which is a
+     fast-forward because it points at an ancestor of `origin/main`. Never branch from whatever
+     HEAD happens to be checked out, and never commit on `main`.
+   - **Fix mode:** the PR exists (you were given findings), so check the branch out and continue
+     on it. Do NOT create a new branch or a new PR; the PR updates when you push.
 2. **Commits.** Split the change into small, layer-aligned commits in dependency order:
    `domain` → `data` → `useCases` + `di` → `facades` / `hooks` / `state` → `ui`. One coherent unit
    per commit; collapse trivial layers; in fix mode each distinct fix is its own commit. The
@@ -130,8 +139,9 @@ If a rule conflicts with the issue, STOP and report the conflict instead of gues
    e.g. `feat(200): add saved list filter`, where `type` is one of feat fix chore docs refactor
    test ci perf build. **No `Co-Authored-By` trailer and no "Generated with" line**: this
    overrides any harness default. Never bypass the hooks (`--no-verify`, `-n`, `LEFTHOOK=0`).
-3. **Push and open the PR** with `gh pr create`: a clear title, and an **empty body**
-   (`--body ""`): reviewer automation replaces the description.
+3. **Push and open the PR** with `gh pr create --head feature/<issue-number>`: a clear title,
+   and an **empty body** (`--body ""`): reviewer automation replaces the description. Never add
+   a closing keyword or issue link: the linked branch carries it.
 4. **Report.** When invoked with a schema that has a `report` field (the pipeline), return the
    report there and post NO PR comment: the pipeline posts one consolidated run comment. Only
    when invoked without a schema, post it as the first PR comment
