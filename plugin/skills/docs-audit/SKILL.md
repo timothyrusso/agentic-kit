@@ -38,8 +38,8 @@ reference the app's docs add deltas to, not something this audit edits.
   `feature-builder`, `code-reviewer`, `finding-vetter`, `qa-engineer`, `qa-web-engineer`) or in
   the app's own `.claude/`.
 - The board in `kit.config.json` is reachable: `gh project view <github.projectNumber> --owner
-  <repository owner> --format json` succeeds, and `github.statusOptions` ids appear in
-  `gh project field-list`.
+  <repository owner> --format json` succeeds, and every `github.statusOptions` id that
+  is set appears in `gh project field-list` (`done` is optional).
 - Tools the config assumes (agent-device, agent-browser, gh, depcruise) are still wired in.
 
 **Semantic**: does the prose still match the code and config?

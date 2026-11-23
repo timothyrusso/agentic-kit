@@ -20,7 +20,7 @@ export interface KitConfig {
     projectNumber: number;
     projectId: string;
     statusFieldId: string;
-    statusOptions: { todo: string; inProgress: string; done: string };
+    statusOptions: { todo: string; inProgress: string; done?: string };
     labels: string[];
   };
   qa?: {

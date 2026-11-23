@@ -60,6 +60,11 @@ describe('parseKitConfig', () => {
     expect(input).toEqual({ projectName: 'acme', lint: {} });
   });
 
+  it('accepts a board without a done status option', () => {
+    const withoutDone = { ...full, github: { ...full.github, statusOptions: { todo: 'a', inProgress: 'b' } } };
+    expect(parseKitConfig(withoutDone)).toEqual(withoutDone);
+  });
+
   it('rejects a config missing projectName with a readable message', () => {
     const { projectName: _omitted, ...rest } = full;
     expect(() => parseKitConfig(rest)).toThrow(KitConfigError);

@@ -31,7 +31,7 @@ One file at the app root, read by every package, agent and skill. `npx
     "projectNumber": 3,
     "projectId": "<board node id>",
     "statusFieldId": "<Status field id>",
-    "statusOptions": { "todo": "<id>", "inProgress": "<id>", "done": "<id>" },
+    "statusOptions": { "todo": "<id>", "inProgress": "<id>" },
     "labels": ["bug", "enhancement"]
   },
   "qa": {
@@ -54,7 +54,7 @@ One file at the app root, read by every package, agent and skill. `npx
 | --- | --- |
 | `projectName` | Every prompt; the run comment and visual summary markers (`<!-- <slug>:pipeline-run -->`, `<!-- <slug>:visual-summary -->`) |
 | `featuresRoot`, `appRoot` | explorer, feature-builder, code-reviewer, finding-vetter, and the lint and dependency rules |
-| `github.*` | write-issue (Status `todo`), the pipeline's PR wiring (Status `inProgress`) |
+| `github.*` | write-issue (Status `todo`), the pipeline's PR wiring (the issue's own item to Status `inProgress`). `statusOptions.done` is optional: the plugin never sets Done |
 | `qa.targets` | The QA surfaces the explorer may choose, and the fallback when it cannot |
 | `qa.simulator`, `qa.metroPort` | qa-engineer (device and Metro port), qa-web-engineer (port) |
 | `qa.baseline` | qa-baseline: the standing checks run for every feature |
@@ -131,8 +131,8 @@ flowchart TD
     DELEG --> ARGS
     subgraph PIPE["implement-issue-pipeline"]
         ARGS["validate args"] --> EXPLORE["explore (default on), pick QA targets"]
-        EXPLORE --> BUILD["build: branch, implement, gates, commits, PR"]
-        BUILD --> WIRE["wire: assignee, board, status in progress"]
+        EXPLORE --> BUILD["build: linked branch, implement, gates, commits, PR"]
+        BUILD --> WIRE["wire: assignee, issue item to in progress"]
         WIRE --> VERIFY["review, mobile QA, web QA in parallel"]
         VERIFY --> VET["vet each blocking finding"]
         VET --> LOOP{"confirmed findings and rounds left?"}
@@ -173,6 +173,16 @@ install and build.
 
 - **Title** meaningful, **body empty**: other reviewer automation rewrites the body on every
   push.
+- **Linked to its issue through the branch.** feature-builder creates `feature/<n>` with `gh
+  issue develop <n> --name feature/<n> --base main` (or reuses that remote branch when it already
+  exists), so the PR opened from it is linked to the issue and closes it on merge with no closing
+  keyword in the empty body.
+- **One board item per issue.** The wire step moves the issue's own item to In progress
+  (`github.statusOptions.inProgress`); the PR is never added as a separate item. Done is set by
+  the board's built-in project workflows (Item closed, Pull request merged, Auto-close issue) when
+  the merge closes the issue, so enable them on the board: the plugin never sets Done, and
+  `github.statusOptions.done` is optional. Without the `project` scope on the gh token the board
+  move is skipped with the remediation `gh auth refresh -s project`, and the run carries on.
 - **One pipeline comment**, posted at the end even when a stage aborts: a status header plus
   collapsible build, review, QA and vetting reports. Agents never post their own comments.
 - **At most one visual summary comment**, only when the explorer proposed visual subjects: up to

@@ -36,11 +36,15 @@
         "statusOptions": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["todo", "inProgress", "done"],
+          "required": ["todo", "inProgress"],
           "properties": {
             "todo": { "type": "string", "minLength": 1 },
             "inProgress": { "type": "string", "minLength": 1 },
-            "done": { "type": "string", "minLength": 1 }
+            "done": {
+              "description": "Optional. The plugin never sets Done: the board's built-in workflows do when the issue closes.",
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "labels": {

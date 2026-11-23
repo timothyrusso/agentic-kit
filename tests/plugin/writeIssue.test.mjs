@@ -144,6 +144,17 @@ describe('write-issue helpers', () => {
     expect(checkKitConfig(config)).toBe(config);
   });
 
+  it('accepts a board without a done status option', () => {
+    const { done: _omitted, ...statusOptions } = config.github.statusOptions;
+    const withoutDone = { ...config, github: { ...config.github, statusOptions } };
+    expect(checkKitConfig(withoutDone)).toBe(withoutDone);
+  });
+
+  it('rejects a done status option that is not a string', () => {
+    const badDone = { ...config, github: { ...config.github, statusOptions: { todo: 'a', inProgress: 'b', done: 3 } } };
+    expect(() => checkKitConfig(badDone)).toThrow('"github.statusOptions.done" must be a string');
+  });
+
   it('finds the nearest kit.config.json and runs the dry run from the command line', () => {
     const dir = mkdtempSync(join(tmpdir(), 'write-issue-'));
     writeFileSync(join(dir, 'kit.config.json'), JSON.stringify(config));
