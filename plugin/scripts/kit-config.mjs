@@ -52,10 +52,13 @@ export function checkKitConfig(value) {
         problems.push(`missing required field "github.${field}"`);
       }
     }
-    for (const option of ['todo', 'inProgress', 'done']) {
+    for (const option of ['todo', 'inProgress']) {
       if (typeof github.statusOptions?.[option] !== 'string') {
         problems.push(`missing required field "github.statusOptions.${option}"`);
       }
+    }
+    if (github.statusOptions?.done !== undefined && typeof github.statusOptions.done !== 'string') {
+      problems.push('"github.statusOptions.done" must be a string');
     }
     if (github.labels !== undefined && !Array.isArray(github.labels)) problems.push('"github.labels" must be an array');
   }
